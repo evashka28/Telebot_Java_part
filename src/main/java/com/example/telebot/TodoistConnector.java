@@ -20,7 +20,7 @@ public class TodoistConnector {
         URL url = new URL("https://api.todoist.com/rest/v1/projects");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("Authorization", "Bearer " + testToken);
+        connection.setRequestProperty("Authorization", "Bearer " + token);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String inputLine;
@@ -40,10 +40,10 @@ public class TodoistConnector {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Authorization", "Bearer " + testToken);
+        connection.setRequestProperty("Authorization", "Bearer " + token);
         connection.setDoOutput(true);
 
-        String jsonInput = "{\"name\": \"CreatedProject\"}";
+        String jsonInput = "{\"name\": \"" + projectName + "\"}";
 
         try(OutputStream os = connection.getOutputStream()) {
             byte[] input = jsonInput.getBytes("utf-8");
@@ -68,10 +68,10 @@ public class TodoistConnector {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Authorization", "Bearer " + testToken);
+        connection.setRequestProperty("Authorization", "Bearer " + token);
         connection.setDoOutput(true);
 
-        String jsonInput = "{\"content\": \"CreatedTask\" , \"project_id\": 2276294580}";
+        String jsonInput = "{\"content\": \"" + taskName + "\" , \"project_id\": 2276294580}";
 
         try(OutputStream os = connection.getOutputStream()) {
             byte[] input = jsonInput.getBytes("utf-8");
