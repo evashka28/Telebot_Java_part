@@ -63,7 +63,7 @@ public class TodoistConnector {
     }
 
     //post-запрос создаёт новое задание в проекте
-    public void createTask(String token, String taskName, long projectId) throws IOException {
+    public void createTask(String token, String taskName, String description , long projectId) throws IOException {
         URL url = new URL("https://api.todoist.com/rest/v1/tasks");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
@@ -71,7 +71,34 @@ public class TodoistConnector {
         connection.setRequestProperty("Authorization", "Bearer " + token);
         connection.setDoOutput(true);
 
-        String jsonInput = "{\"content\": \"" + taskName + "\" , \"project_id\": " + projectId + "}";
+        String jsonInput = "{\"content\": \"" + taskName + "\" , \"description\": \"" + description + "\" , \"project_id\": " + projectId + "}";
+
+        try(OutputStream os = connection.getOutputStream()) {
+            byte[] input = jsonInput.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        System.out.println(response.toString());
+    }
+
+    public void updateTask(String token, String taskName, String description , long id) throws IOException {
+        URL url = new URL("https://api.todoist.com/rest/v1/tasks/" + id);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Authorization", "Bearer " + token);
+        connection.setDoOutput(true);
+
+        String jsonInput = "{\"content\": \"" + taskName + "\" , \"description\": \"" + description  + "\"}";
 
         try(OutputStream os = connection.getOutputStream()) {
             byte[] input = jsonInput.getBytes("utf-8");
@@ -109,7 +136,7 @@ public class TodoistConnector {
         System.out.println(response.toString());
     }
 
-    //не работает
+    //delete-запрос удаляет указанное задание
     public void deleteTask(String token, long taskId) throws IOException {
         URL url = new URL("https://api.todoist.com/rest/v1/tasks/" + taskId);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
