@@ -10,4 +10,9 @@ public class UserController {
         System.out.print(newUser.toString());
         return newUser;
     }
+
+    @PutMapping(value = "/user/{id}", consumes = "application/json", produces = "application/json")
+    public User updateUser(@RequestBody User updatedUser){
+        return updatedUser;
+    }
 }

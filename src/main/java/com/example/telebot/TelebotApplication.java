@@ -12,8 +12,8 @@ public class TelebotApplication {
         SpringApplication.run(TelebotApplication.class, args);
         TodoistConnector con = new TodoistConnector();
         try {
-            con.getUsersProjects("");
-            con.createTask("", "");
+            con.completeTask("0193f9ca236affc47cc58ea0868e25bc494da9fe", 5254480855L);
+            con.deleteTask("0193f9ca236affc47cc58ea0868e25bc494da9fe", 5267922027L);
         } catch (IOException e) {
             e.printStackTrace();
         }
