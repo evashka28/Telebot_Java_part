@@ -22,4 +22,10 @@ public class Task {
     public String getUrl(){
         return url;
     }
+
+    @Override
+    public String toString()
+    {
+        return "{id:" + id + ", name:" + name + ", url:" + url + "}";
+    }
 }

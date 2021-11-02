@@ -2,10 +2,13 @@ package com.example.telebot.services;
 
 import com.example.telebot.Task;
 import com.example.telebot.TodoistConnector;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -21,19 +24,19 @@ public class TaskService implements TaskServiceInterface{
     }
 
     @Override
-    public Task create(Task task, String userId) throws IOException {
+    public Task create(Task task, String userId, boolean favourite) throws IOException {
         connector.createTask(service.getToken(userId), task.getName(), task.getUrl(), service.getProjectId(userId));
         return task;
     }
 
     @Override
-    public List<Task> all(String userId) {
-        return null;
+    public List<Task> all(String userId, boolean favourite) throws IOException, ParseException {
+        return connector.getAllTasks(service.getToken(userId), Arrays.asList(5278795244L, 5278654858L));
     }
 
     @Override
-    public Task get(String userId) {
-        return null;
+    public Task get(String userId, long taskId, boolean favourite) throws IOException, ParseException {
+        return connector.getTask(service.getToken(userId), taskId);
     }
 
     @Override

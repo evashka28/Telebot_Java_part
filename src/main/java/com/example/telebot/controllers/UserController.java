@@ -6,6 +6,8 @@ import com.example.telebot.services.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 public class UserController {
     private final UserServiceInterface service;
@@ -17,7 +19,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/user", consumes = "application/json", produces = "application/json")
-    public User user(@RequestBody User newUser){
+    public User user(@RequestBody User newUser) throws IOException {
         return service.create(newUser);
     }
 
