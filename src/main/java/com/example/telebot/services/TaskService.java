@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,24 +23,25 @@ public class TaskService implements TaskServiceInterface{
     }
 
     @Override
-    public Task create(Task task, String userId, boolean favourite) throws IOException {
-        connector.createTask(service.getToken(userId), task.getName(), task.getUrl(), service.getProjectId(userId));
+    public Task create(Task task, String userId) throws IOException {
+        long projectId = (task.getFavourite() ? service.getProjectFavouritesId(userId) : service.getProjectId(userId));
+        connector.createTask(service.getToken(userId), task.getContent(), task.getDescription(), projectId);
         return task;
     }
 
     @Override
-    public List<Task> all(String userId, boolean favourite) throws IOException, ParseException {
+    public List<Task> all(String userId) throws IOException, ParseException {
         return connector.getAllTasks(service.getToken(userId), Arrays.asList(5278795244L, 5278654858L));
     }
 
     @Override
-    public Task get(String userId, long taskId, boolean favourite) throws IOException, ParseException {
+    public Task get(String userId, long taskId) throws IOException, ParseException {
         return connector.getTask(service.getToken(userId), taskId);
     }
 
     @Override
     public Task update(long id, Task task, String userId) throws IOException {
-        connector.updateTask(service.getToken(userId), task.getName(), task.getUrl(), id);
+        connector.updateTask(service.getToken(userId),  task.getContent(), task.getDescription(), id);
         return task;
     }
 
@@ -54,4 +54,9 @@ public class TaskService implements TaskServiceInterface{
     public void complete(long id, String userId) throws IOException {
         connector.completeTask(service.getToken(userId), id);
     }
+
+//    public boolean CheckURL(String url)
+//    {
+//        return true;
+//    }
 }

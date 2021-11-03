@@ -38,12 +38,12 @@ public class UserService implements UserServiceInterface{
 
     @Override
     public long getProjectId(String id) {
-        return 2276294580L;
+        return 2277542643L;
     }
 
     @Override
     public long getProjectFavouritesId(String id) {
-        return 2276294580L;
+        return 2277542644L;
     }
 
 

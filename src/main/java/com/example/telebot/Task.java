@@ -1,31 +1,43 @@
 package com.example.telebot;
 
 public class Task {
-    private final String id;
-    private final String name;
-    private final String url;
+    private String id;
+    private String description;
+    private String content;
+    private boolean favourite;
+    private TaskType type;
 
-    public Task(String id, String name, String url){
+
+    public Task(String id, String description, String content, boolean favourite, TaskType type){
         this.id = id;
-        this.name = name;
-        this.url = url;
+        this.description = description;
+        this.content = content;
+        this.favourite = favourite;
+        this.type = type;
     }
+
+    public Task(){}
 
     public String getId(){
         return id;
     }
 
-    public String getName(){
-        return name;
+    public String getDescription(){
+        return description;
     }
 
-    public String getUrl(){
-        return url;
+    public String getContent(){
+        return content;
     }
+
+    public boolean getFavourite() { return favourite; }
+
+    public TaskType getType() { return type; }
 
     @Override
     public String toString()
     {
-        return "{id:" + id + ", name:" + name + ", url:" + url + "}";
+        return "{id:" + id + ", name:" + description + ", url:" + content + "}";
     }
 }
+

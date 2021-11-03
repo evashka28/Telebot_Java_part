@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.util.List;
 
 public interface TaskServiceInterface {
-    Task create(Task task, String userId, boolean favourite) throws IOException;
+    Task create(Task task, String userId) throws IOException;
 
-    List<Task> all(String userId, boolean favourite) throws IOException, ParseException;
+    List<Task> all(String userId) throws IOException, ParseException;
 
-    Task get(String userId, long taskId, boolean favourite) throws IOException, ParseException;
+    Task get(String userId, long taskId) throws IOException, ParseException;
 
     Task update(long id, Task task, String userId) throws IOException;
 

@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -231,7 +230,7 @@ public class TodoistConnector {
 
     public static Task taskFromJSONObject(JSONObject object){
         if(object.containsKey("id") && object.containsKey("description") && object.containsKey("content"))
-            return new Task(object.get("id").toString(),object.get("description").toString(),object.get("content").toString());
+            return new Task(object.get("id").toString(),object.get("description").toString(),object.get("content").toString(), false, TaskType.UNKNOWN);
         return null;
     }
 }
