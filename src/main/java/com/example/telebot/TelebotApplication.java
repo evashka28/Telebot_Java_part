@@ -14,6 +14,9 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import  com.example.telebot.User;
+import  com.example.telebot.services.UserServiceBD;
+
 
 import java.io.IOException;
 
@@ -22,10 +25,14 @@ import java.io.IOException;
 public class TelebotApplication {
 
     public static void main(String[] args) {
+        UserServiceBD userServiceBD = new UserServiceBD();
+        User user = new User("678", "Mina", "ghjy35");
+        userServiceBD.saveUser(user);
         SpringApplication.run(TelebotApplication.class, args);
 
     }
-    
+}
+   /*
     @Bean TodoistConnector todoistConnector(){
         return new TodoistConnector();
     }
@@ -40,3 +47,4 @@ public class TelebotApplication {
     }
 
 }
+*/
