@@ -1,10 +1,17 @@
 package com.example.telebot;
-
+import javax.persistence.*;
+@Entity
+@Table (name = "tasks")
 public class Task {
+    @Id
     private String id;
+    @Column(name = "description")
     private String description;
+    @Column(name = "content")
     private String content;
+    @Column(name = "favourite")
     private boolean favourite;
+    @Column(name = "type")
     private TaskType type;
 
 
