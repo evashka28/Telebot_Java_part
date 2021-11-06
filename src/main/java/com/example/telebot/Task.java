@@ -11,15 +11,13 @@ public class Task {
     private String content;
     @Column(name = "favourite")
     private boolean favourite;
-    private TaskType type;
 
 
-    public Task(String id, String description, String content, boolean favourite, TaskType type){
+    public Task(String id, String description, String content, boolean favourite){
         this.id = id;
         this.description = description;
         this.content = content;
         this.favourite = favourite;
-        this.type = type;
     }
 
     public Task(){}
@@ -37,8 +35,6 @@ public class Task {
     }
 
     public boolean getFavourite() { return favourite; }
-
-    public TaskType getType() { return type; }
 
     @Override
     public String toString()
