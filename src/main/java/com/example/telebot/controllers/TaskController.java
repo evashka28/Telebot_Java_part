@@ -1,14 +1,12 @@
 package com.example.telebot.controllers;
 
 import com.example.telebot.Task;
-import com.example.telebot.TaskType;
 import com.example.telebot.services.TaskServiceInterface;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -20,13 +18,6 @@ public class TaskController {
     public TaskController(TaskServiceInterface service){
         this.service = service;
     }
-
-    @PostMapping(value="test")
-    TaskType test(@RequestBody TaskType type)
-    {
-        return type;
-    }
-
 
     @GetMapping(value = "/tasks", produces = "application/json")
     List<Task> allTasks(@RequestHeader String userId) throws IOException, ParseException {

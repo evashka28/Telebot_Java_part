@@ -5,11 +5,11 @@ import  com.example.telebot.User;
 import  com.example.telebot.dao.UserDAOImpl;
 
 
-public class UserServiceBD {
+public class UserServiceDB {
 
     private UserDAOImpl usersDao = new UserDAOImpl();
 
-    public UserServiceBD() {
+    public UserServiceDB() {
     }
 
     public User findUser(int id) {
