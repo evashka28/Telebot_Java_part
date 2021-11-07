@@ -19,6 +19,7 @@ public class User {
         this.id = id;
         this.token = token;
         this.name = name;
+        this.syncToken = "*";
     }
 
     public String getId() { return id; }
