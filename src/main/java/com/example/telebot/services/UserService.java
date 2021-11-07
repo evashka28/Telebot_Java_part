@@ -1,50 +1,18 @@
 package com.example.telebot.services;
 
-
-import com.example.telebot.TodoistConnector;
 import com.example.telebot.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
 
-@Service
-public class UserService implements UserServiceInterface{
+public interface UserService {
+    User create(User user) throws IOException;
 
-    private final TodoistConnector connector;
+    User update(User user, String userId);
 
-    @Autowired
-    public UserService(TodoistConnector connector) {
-        this.connector = connector;
-    }
+    String getToken(String id);
 
-    @Override
-    public User create(User user) throws IOException {
-        System.out.println("User (id=" + user.getId() + ") was added");
-        connector.createProject(user.getToken(), "TeleBotProject");
-        connector.createProject(user.getToken(), "TeleBotFavouritesProject");
-        return null;
-    }
+    long getProjectId(String id);
 
-    @Override
-    public User update(User user, String userId) {
-        return null;
-    }
-
-    @Override
-    public String getToken(String id) {
-        return "0193f9ca236affc47cc58ea0868e25bc494da9fe";
-    }
-
-    @Override
-    public long getProjectId(String id) {
-        return 2277542643L;
-    }
-
-    @Override
-    public long getProjectFavouritesId(String id) {
-        return 2277542644L;
-    }
-
-
+    long getProjectFavouritesId(String id);
 }

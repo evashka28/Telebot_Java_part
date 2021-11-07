@@ -10,25 +10,18 @@ public class User {
     private final String name;
     @Column(name = "token")
     private final String token;
-
-    //private final String projectId;
-    //private final String projectFavouriteId;
+    @Column(name = "sync_token")
+    private String syncToken;
 
 
 
     public User(String id, String name, String token){
         this.id = id;
-        //this.projectId = projectId;
-       // this.projectFavouriteId = projectFavouriteId;
         this.token = token;
         this.name = name;
     }
 
     public String getId() { return id; }
-
-   // public String getProjectId() {
-    //    return projectId;
-    //}
 
     public String getToken() {
         return token;
@@ -36,7 +29,6 @@ public class User {
 
     public String getName(){ return name; }
 
-   // public String getProjectFavouriteId() { return projectFavouriteId; }
 
     @Override
     public String toString(){

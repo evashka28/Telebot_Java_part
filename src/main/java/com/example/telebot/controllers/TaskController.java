@@ -1,7 +1,7 @@
 package com.example.telebot.controllers;
 
 import com.example.telebot.Task;
-import com.example.telebot.services.TaskServiceInterface;
+import com.example.telebot.services.TaskService;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +12,10 @@ import java.util.List;
 @SuppressWarnings("unused")
 @RestController
 public class TaskController {
-    private final TaskServiceInterface service;
+    private final TaskService service;
 
     @Autowired
-    public TaskController(TaskServiceInterface service){
+    public TaskController(TaskService service){
         this.service = service;
     }
 
@@ -25,12 +25,12 @@ public class TaskController {
     }
 
     @GetMapping(value = "/task/{id}", produces = "application/json")
-    Task task(@PathVariable long id, @RequestHeader String userId) throws IOException, ParseException {
+    Task getTaskById(@PathVariable long id, @RequestHeader String userId) throws IOException, ParseException {
         return service.get(userId, id);
     }
 
     @PostMapping(value = "/task", consumes = "application/json", produces = "application/json")
-    Task newTasks(@RequestBody Task newTask, @RequestHeader String userId) throws IOException {
+    Task newTask(@RequestBody Task newTask, @RequestHeader String userId) throws IOException {
         return service.create(newTask, userId);
     }
 

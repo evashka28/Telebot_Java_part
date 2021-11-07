@@ -2,7 +2,7 @@ package com.example.telebot.controllers;
 
 
 import com.example.telebot.User;
-import com.example.telebot.services.UserServiceInterface;
+import com.example.telebot.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,16 +10,15 @@ import java.io.IOException;
 
 @RestController
 public class UserController {
-    private final UserServiceInterface service;
-
+    private final UserService service;
 
     @Autowired
-    public UserController(UserServiceInterface service){
+    public UserController(UserService service){
         this.service = service;
     }
 
     @PostMapping(value = "/user", consumes = "application/json", produces = "application/json")
-    public User user(@RequestBody User newUser) throws IOException {
+    public User createUser(@RequestBody User newUser) throws IOException {
         return service.create(newUser);
     }
 
