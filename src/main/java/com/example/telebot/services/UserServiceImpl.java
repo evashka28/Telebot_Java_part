@@ -12,27 +12,30 @@ import java.io.IOException;
 public class UserServiceImpl implements UserService {
 
     private final TodoistConnector connector;
+    private final UserServiceDB database;
 
     @Autowired
-    public UserServiceImpl(TodoistConnector connector) {
+    public UserServiceImpl(TodoistConnector connector, UserServiceDB database) {
         this.connector = connector;
+        this.database = database;
     }
 
     @Override
     public User create(User user) throws IOException {
         System.out.println("User (id=" + user.getId() + ") was added");
-        connector.createProject(user.getToken(), "TeleBotProject");
-        connector.createProject(user.getToken(), "TeleBotFavouritesProject");
+        database.saveUser(user);
         return null;
     }
 
     @Override
     public User update(User user, String userId) {
+        //database.updateUser();
         return null;
     }
 
     @Override
     public String getToken(String id) {
+        //database.findUser(id).getToken();
         return "0193f9ca236affc47cc58ea0868e25bc494da9fe";
     }
 

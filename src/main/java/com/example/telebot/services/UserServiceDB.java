@@ -1,10 +1,10 @@
 package com.example.telebot.services;
 
-
 import  com.example.telebot.User;
 import  com.example.telebot.dao.UserDAOImpl;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class UserServiceDB {
 
     private UserDAOImpl usersDao = new UserDAOImpl();
