@@ -1,0 +1,42 @@
+/*package com.example.telebot.dao;
+
+
+import  com.example.telebot.utils.HibernateSessionFactoryUtil;
+import  com.example.telebot.User;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+public abstract class DAO <T extends Serializable> {
+    private Class<T> clazz;
+
+    public User findById(int id) {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(User.class, id);
+    }
+
+    public User save(User user) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.save(user);
+        tx1.commit();
+        session.close();
+        return user;
+    }
+
+    public User update(User user) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.update(user);
+        tx1.commit();
+        session.close();
+        return user;
+    }
+
+    public void delete(User user) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.delete(user);
+        tx1.commit();
+        session.close();
+    }
+
+}*/
