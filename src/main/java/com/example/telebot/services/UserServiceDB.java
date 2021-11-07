@@ -16,16 +16,16 @@ public class UserServiceDB {
         return usersDao.findById(id);
     }
 
-    public void saveUser(User user) {
-        usersDao.save(user);
+    public User saveUser(User user) {
+        return usersDao.save(user);
     }
 
     public void deleteUser(User user) {
         usersDao.delete(user);
     }
 
-    public void updateUser(User user) {
-        usersDao.update(user);
+    public User updateUser(User user) {
+        return usersDao.update(user);
     }
 
 

@@ -6,8 +6,8 @@ import  com.example.telebot.Task;
 
 public interface TaskDAO {
     public Task findById(int id);
-    public void save(Task task);
-    public void update(Task task);
+    public Task save(Task task);
+    public Task update(Task task);
     public void delete(Task task);
 
 

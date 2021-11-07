@@ -11,20 +11,22 @@ public class UserDAOImpl implements UserDAO {
         return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(User.class, id);
     }
 
-    public void save(User user) {
+    public User save(User user) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         session.save(user);
         tx1.commit();
         session.close();
+        return user;
     }
 
-    public void update(User user) {
+    public User update(User user) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         session.update(user);
         tx1.commit();
         session.close();
+        return user;
     }
 
     public void delete(User user) {

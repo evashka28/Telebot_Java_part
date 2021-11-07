@@ -6,8 +6,8 @@ import  com.example.telebot.User;
 
 public interface UserDAO {
     public User findById(int id);
-    public void save(User user);
-    public void update(User user);
+    public User save(User user);
+    public User update(User user);
     public void delete(User user);
 
 
