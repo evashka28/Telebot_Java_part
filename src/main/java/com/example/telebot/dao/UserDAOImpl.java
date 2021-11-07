@@ -1,6 +1,6 @@
 package com.example.telebot.dao;
 
-import  com.example.telebot.utils.HibernateSessionFactoryUtil;
+/*import  com.example.telebot.utils.HibernateSessionFactoryUtil;
 import  com.example.telebot.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -37,4 +37,4 @@ public class UserDAOImpl implements UserDAO {
         session.close();
     }
 
-}
+}*/

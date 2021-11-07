@@ -1,42 +1,46 @@
-/*package com.example.telebot.dao;
+package com.example.telebot.dao;
 
 
 import  com.example.telebot.utils.HibernateSessionFactoryUtil;
-import  com.example.telebot.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-public abstract class DAO <T extends Serializable> {
+import java.io.Serializable;
+
+public class DAOImpl<T> implements DAO{
     private Class<T> clazz;
 
-    public User findById(int id) {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(User.class, id);
+    public Serializable findById(int id) {
+        return (Serializable) HibernateSessionFactoryUtil.getSessionFactory().openSession().get(clazz, id);
     }
 
-    public User save(User user) {
+    @Override
+    public Serializable save(Serializable entity) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.save(user);
+        session.save(entity);
         tx1.commit();
         session.close();
-        return user;
+        return entity;
     }
 
-    public User update(User user) {
+    @Override
+    public Serializable update(Serializable entity) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.update(user);
+        session.update(entity);
         tx1.commit();
         session.close();
-        return user;
+        return entity;
     }
 
-    public void delete(User user) {
+    @Override
+    public void delete(Serializable entity) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.delete(user);
+        session.delete(entity);
         tx1.commit();
         session.close();
     }
 
-}*/
+}

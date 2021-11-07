@@ -1,4 +1,4 @@
-package com.example.telebot.services;
+/*package com.example.telebot.services;
 
 import  com.example.telebot.User;
 import  com.example.telebot.dao.UserDAOImpl;
@@ -31,4 +31,4 @@ public class UserServiceDB {
 
 
 
-}
+}*/

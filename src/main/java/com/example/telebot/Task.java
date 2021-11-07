@@ -1,8 +1,10 @@
 package com.example.telebot;
 import javax.persistence.*;
+import java.io.Serializable;
+
 @Entity
 @Table (name = "tasks")
-public class Task {
+public class Task implements Serializable {
     @Id
     private String id;
     @Column(name = "description")
