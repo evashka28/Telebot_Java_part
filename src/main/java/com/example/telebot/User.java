@@ -6,7 +6,6 @@ import java.io.Serializable;
 @Table (name = "users")
 public class User implements Serializable {
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     @Column(name = "name")
     private String name;

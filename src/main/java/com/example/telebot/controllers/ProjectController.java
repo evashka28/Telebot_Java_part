@@ -19,7 +19,7 @@ public class ProjectController {
 
     //возвращает все проекты пользователя в todoist
     @GetMapping(value = "/projects")
-    public List<Project> allProjects(){
+    public List<Project> allProjects(@RequestHeader String userId){
         return null;
     }
 
@@ -30,17 +30,17 @@ public class ProjectController {
     }
 
     @PostMapping(value = "project")
-    public void createProject(@RequestBody Project newProject){
+    public void createProject(@RequestBody Project newProject, @RequestHeader String userId){
 
     }
 
     @DeleteMapping(value = "project/{id}")
-    public void deleteProject(@PathVariable long id){
+    public void deleteProject(@PathVariable long id, @RequestHeader String userId){
 
     }
 
     @PostMapping(value = "project/selected/{id}")
-    public void selectProject(@PathVariable long id){
+    public void selectProject(@PathVariable long id, @RequestHeader String userId){
 
     }
     @DeleteMapping(value = "project/selected/{id}")

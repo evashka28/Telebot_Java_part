@@ -7,12 +7,18 @@ import java.io.Serializable;
 public class Task implements Serializable {
     @Id
     private String id;
-    @Column(name = "description")
+    @Column(name = "project_id")
+    private String projectId;
+
     private String description;
-    @Column(name = "content")
+
     private String content;
     @Column(name = "favourite")
     private boolean favourite;
+    @Column(name = "creation_datetime")
+    private String creationDatetime;
+    @Column(name = "last_access_datetime")
+    private String lastAccessDatetime;
 
 
     public Task(String id, String description, String content, boolean favourite){

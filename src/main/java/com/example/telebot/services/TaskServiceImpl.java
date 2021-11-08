@@ -2,6 +2,7 @@ package com.example.telebot.services;
 
 import com.example.telebot.Task;
 import com.example.telebot.TodoistConnector;
+import com.example.telebot.dao.TaskDAO;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,17 +17,20 @@ public class TaskServiceImpl implements TaskService {
 
     private final UserServiceImpl service;
 
+    private final TaskDAO taskDAO;
+
     @Autowired
-    public TaskServiceImpl(TodoistConnector connector, UserServiceImpl service){
+    public TaskServiceImpl(TodoistConnector connector, UserServiceImpl service, TaskDAO taskDAO){
         this.connector = connector;
         this.service = service;
+        this.taskDAO = taskDAO;
     }
 
     @Override
     public Task create(Task task, String userId) throws IOException {
         long projectId = (task.getFavourite() ? service.getProjectFavouritesId(userId) : service.getProjectId(userId));
         connector.createTask(service.getToken(userId), task.getContent(), task.getDescription(), projectId);
-        return task;
+        return taskDAO.save(task);
     }
 
     @Override
@@ -35,8 +39,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task get(String userId, long taskId) throws IOException, ParseException {
-        return connector.getTask(service.getToken(userId), taskId);
+    public Task get(String userId, long id) throws IOException, ParseException {
+        return connector.getTask(service.getToken(userId), id);
     }
 
     @Override

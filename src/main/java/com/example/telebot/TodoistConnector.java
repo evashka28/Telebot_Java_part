@@ -49,7 +49,13 @@ public class TodoistConnector {
         String response = GETRequest("https://api.todoist.com/sync/v8/sync?", params, token);
     }
 
-
+    //get-запрос получает проект по id
+    public Task getProject(String token, long projectId) throws IOException, ParseException {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("project_id", projectId);
+        String response = GETRequest("https://api.todoist.com/sync/v8/projects/get?", params, token);
+        return null;
+    }
 
     //post-запрос создаёт новый проект
     public void createProject(String token, String projectName) throws IOException    {
@@ -65,6 +71,7 @@ public class TodoistConnector {
     public Task getTask(String token, long taskId) throws IOException, ParseException {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("item_id", taskId);
+        params.put("all_data", false);
         String response = GETRequest("https://api.todoist.com/sync/v8/items/get?", params, token);
         return null;
     }
@@ -110,26 +117,5 @@ public class TodoistConnector {
         String response = GETRequest("https://api.todoist.com/sync/v8/sync?", params, token);
     }
 
-    public static Task parseTaskJSON(String JSONString) throws ParseException {
-        JSONParser parser = new JSONParser();
-        JSONObject object = (JSONObject) parser.parse(JSONString);
-        Task outputTask = taskFromJSONObject(object);
-        return outputTask;
-    }
 
-    public static List<Task> parseAllTasksJSON(String JSONString) throws ParseException {
-        JSONParser parser = new JSONParser();
-        List<Task> outputList = new ArrayList<Task>();
-        JSONArray array = (JSONArray) parser.parse(JSONString);
-        for (int i = 0; i < array.size(); i++){
-            outputList.add(taskFromJSONObject((JSONObject) array.get(i)));
-        }
-        return outputList;
-    }
-
-    public static Task taskFromJSONObject(JSONObject object){
-        if(object.containsKey("id") && object.containsKey("description") && object.containsKey("content"))
-            return new Task(object.get("id").toString(),object.get("description").toString(),object.get("content").toString(), false);
-        return null;
-    }
 }
