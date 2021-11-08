@@ -1,14 +1,12 @@
-/*package com.example.telebot.dao;
+package com.example.telebot.dao;
 
-import com.example.telebot.utils.HibernateSessionFactoryUtil;
-import  com.example.telebot.User;
+import com.example.telebot.Project;
+import com.example.telebot.User;
+import org.springframework.stereotype.Repository;
 
-
-public interface UserDAO {
-    public User findById(int id);
-    public User save(User user);
-    public User update(User user);
-    public void delete(User user);
-
-
-}*/
+@Repository
+public class UserDAO extends AbstractDAO<User>{
+    public UserDAO(){
+        setClazz(User.class);
+    }
+}

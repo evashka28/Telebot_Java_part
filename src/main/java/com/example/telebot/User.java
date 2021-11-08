@@ -7,11 +7,11 @@ import java.io.Serializable;
 public class User implements Serializable {
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final String id;
+    private String id;
     @Column(name = "name")
-    private final String name;
+    private String name;
     @Column(name = "token")
-    private final String token;
+    private String token;
     @Column(name = "sync_token")
     private String syncToken;
 
@@ -21,6 +21,10 @@ public class User implements Serializable {
         this.id = id;
         this.token = token;
         this.name = name;
+        this.syncToken = "*";
+    }
+
+    public User() {
         this.syncToken = "*";
     }
 

@@ -1,4 +1,6 @@
 package com.example.telebot;
 
-public class Project {
+import java.io.Serializable;
+
+public class Project implements Serializable {
 }
