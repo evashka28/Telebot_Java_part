@@ -15,7 +15,7 @@ public abstract class AbstractDAO<T extends Serializable>{
         clazz = Preconditions.checkNotNull(clazzToSet);
     }
 
-    public T findById(int id) {
+    public T findById(long id) {
         return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(clazz, id);
     }
 

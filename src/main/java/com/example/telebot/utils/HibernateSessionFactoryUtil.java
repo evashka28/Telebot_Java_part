@@ -2,6 +2,7 @@ package com.example.telebot.utils;
 
 
 
+import com.example.telebot.Project;
 import com.example.telebot.User;
 import com.example.telebot.Task;
 import org.hibernate.SessionFactory;
@@ -19,6 +20,7 @@ public class HibernateSessionFactoryUtil {
                 Configuration configuration = new Configuration().configure();
                 configuration.addAnnotatedClass(User.class);
                 configuration.addAnnotatedClass(Task.class);
+                configuration.addAnnotatedClass(Project.class);
 
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());

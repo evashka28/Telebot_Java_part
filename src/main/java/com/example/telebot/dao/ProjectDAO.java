@@ -21,7 +21,7 @@ public class ProjectDAO extends AbstractDAO<Project>{
     {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(Project.class);
-        ArrayList<Project> output = (ArrayList<Project>) criteria.add(Restrictions.eq("user_id", userId)).list();
+        ArrayList<Project> output = (ArrayList<Project>) criteria.add(Restrictions.eq("userId", userId)).list();
         session.close();
         return output;
     }

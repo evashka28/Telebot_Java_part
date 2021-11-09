@@ -6,7 +6,7 @@ import java.io.Serializable;
 @Table (name = "users")
 public class User implements Serializable {
     @Id
-    private String id;
+    private long id;
     @Column(name = "name")
     private String name;
     @Column(name = "token")
@@ -16,7 +16,7 @@ public class User implements Serializable {
 
 
 
-    public User(String id, String name, String token){
+    public User(long id, String name, String token){
         this.id = id;
         this.token = token;
         this.name = name;
@@ -27,7 +27,7 @@ public class User implements Serializable {
         this.syncToken = "*";
     }
 
-    public String getId() { return id; }
+    public long getId() { return id; }
 
     public String getToken() {
         return token;

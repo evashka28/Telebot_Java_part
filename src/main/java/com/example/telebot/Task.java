@@ -6,13 +6,17 @@ import java.io.Serializable;
 @Table (name = "tasks")
 public class Task implements Serializable {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(name = "todoist_id")
+    private long todoistId;
     @Column(name = "project_id")
-    private String projectId;
-
+    private long projectId;
+    @Transient
     private String description;
-
+    @Transient
     private String content;
+
     @Column(name = "favourite")
     private boolean favourite;
     @Column(name = "creation_datetime")
@@ -21,7 +25,7 @@ public class Task implements Serializable {
     private String lastAccessDatetime;
 
 
-    public Task(String id, String description, String content, boolean favourite){
+    public Task(long id, String description, String content, boolean favourite){
         this.id = id;
         this.description = description;
         this.content = content;
@@ -30,8 +34,16 @@ public class Task implements Serializable {
 
     public Task(){}
 
-    public String getId(){
+    public long getId(){
         return id;
+    }
+
+    public long getTodoistId() {
+        return todoistId;
+    }
+
+    public long getProjectId() {
+        return projectId;
     }
 
     public String getDescription(){
@@ -43,6 +55,46 @@ public class Task implements Serializable {
     }
 
     public boolean getFavourite() { return favourite; }
+
+    public String getCreationDatetime() {
+        return creationDatetime;
+    }
+
+    public String getLastAccessDatetime() {
+        return lastAccessDatetime;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
+    }
+
+    public void setTodoistId(long todoistId) {
+        this.todoistId = todoistId;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setCreationDatetime(String creationDatetime) {
+        this.creationDatetime = creationDatetime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setLastAccessDatetime(String lastAccessDatetime) {
+        this.lastAccessDatetime = lastAccessDatetime;
+    }
+
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
+    }
 
     @Override
     public String toString()

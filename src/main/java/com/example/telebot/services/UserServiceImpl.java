@@ -23,28 +23,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) throws IOException {
-        System.out.println("User (id=" + user.getId() + ") was added");
         return userDAO.save(user);
     }
 
     @Override
-    public User update(User user, String userId) {
+    public User update(User user, long userId) {
         return userDAO.update(user);
     }
 
     @Override
-    public String getToken(String id) {
-        return userDAO.findById(Integer.parseInt(id)).getToken();
-        //return "0193f9ca236affc47cc58ea0868e25bc494da9fe";
+    public String getToken(long id) {
+        return userDAO.findById(id).getToken();
     }
 
     @Override
-    public long getProjectId(String id) {
+    public long getProjectId(long id) {
         return 2277542643L;
     }
 
     @Override
-    public long getProjectFavouritesId(String id) {
+    public long getProjectFavouritesId(long id) {
         return 2277542644L;
     }
 

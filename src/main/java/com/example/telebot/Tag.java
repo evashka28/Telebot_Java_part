@@ -1,16 +1,15 @@
 package com.example.telebot;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 public class Tag implements Serializable {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     @Column(name = "user_id")
-    private String userId;
+    private long userId;
     @Column(name = "name")
     private String name;
 

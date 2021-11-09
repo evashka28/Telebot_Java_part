@@ -20,32 +20,32 @@ public class TaskController {
     }
 
     @GetMapping(value = "/tasks", produces = "application/json")
-    List<Task> allTasks(@RequestHeader String userId) throws IOException, ParseException {
+    List<Task> allTasks(@RequestHeader long userId) throws IOException, ParseException {
         return service.all(userId);
     }
 
     @GetMapping(value = "/task/{id}", produces = "application/json")
-    Task getTaskById(@PathVariable long id, @RequestHeader String userId) throws IOException, ParseException {
+    Task getTaskById(@PathVariable long id, @RequestHeader long userId) throws IOException, ParseException {
         return service.get(userId, id);
     }
 
     @PostMapping(value = "/task", consumes = "application/json", produces = "application/json")
-    Task newTask(@RequestBody Task newTask, @RequestHeader String userId) throws IOException {
+    Task newTask(@RequestBody Task newTask, @RequestHeader long userId) throws IOException {
         return service.create(newTask, userId);
     }
 
     @PutMapping(value = "/task/{id}", consumes = "application/json", produces = "application/json")
-    Task updateTask(@PathVariable long id, @RequestBody Task updatedTask, @RequestHeader String userId) throws IOException {
+    Task updateTask(@PathVariable long id, @RequestBody Task updatedTask, @RequestHeader long userId) throws IOException {
         return service.update(id, updatedTask, userId);
     }
 
     @DeleteMapping(value = "/task/{id}")
-    void deleteTask(@PathVariable long id, @RequestHeader String userId) throws IOException {
+    void deleteTask(@PathVariable long id, @RequestHeader long userId) throws IOException {
         service.delete(id, userId);
     }
 
     @PutMapping(value = "/task/{id}/complete")
-    void completeTask(@PathVariable long id, @RequestHeader String userId) throws IOException {
+    void completeTask(@PathVariable long id, @RequestHeader long userId) throws IOException {
         service.complete(id, userId);
     }
 }

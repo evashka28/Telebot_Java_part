@@ -8,11 +8,11 @@ import java.io.IOException;
 public interface UserService {
     User create(User user) throws IOException;
 
-    User update(User user, String userId);
+    User update(User user, long userId);
 
-    String getToken(String id);
+    String getToken(long id);
 
-    long getProjectId(String id);
+    long getProjectId(long id);
 
-    long getProjectFavouritesId(String id);
+    long getProjectFavouritesId(long id);
 }

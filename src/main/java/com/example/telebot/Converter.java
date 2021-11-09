@@ -28,31 +28,74 @@ public class Converter {
     public static Task parseTaskJSON(String JSONString) throws ParseException {
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject) parser.parse(JSONString);
-        Task outputTask = taskFromJSONObject(object);
-        return outputTask;
+        if(object.containsKey("item")) {
+            JSONObject task = (JSONObject) object.get("item");
+
+            Task outputTask = taskFromJSONObject(task);
+            return outputTask;
+        }
+        return null;
     }
 
     public static List<Task> parseAllTasksJSON(String JSONString) throws ParseException {
         JSONParser parser = new JSONParser();
-        List<Task> outputList = new ArrayList<Task>();
-        JSONArray array = (JSONArray) parser.parse(JSONString);
-        for (int i = 0; i < array.size(); i++){
-            outputList.add(taskFromJSONObject((JSONObject) array.get(i)));
+        JSONObject object = (JSONObject) parser.parse(JSONString);
+        if(object.containsKey("items")) {
+            List<Task> outputList = new ArrayList<Task>();
+            JSONArray array = (JSONArray) object.get("items");
+            for (int i = 0; i < array.size(); i++) {
+                outputList.add(taskFromJSONObject((JSONObject) array.get(i)));
+            }
+            return outputList;
         }
-        return outputList;
-    }
-
-    public static List<Project> parseAllProjectsJSON(String JSONString){
         return null;
     }
 
-    public static Task taskFromJSONObject(JSONObject object){
-        if(object.containsKey("id") && object.containsKey("description") && object.containsKey("content"))
-            return new Task(object.get("id").toString(),object.get("description").toString(),object.get("content").toString(), false);
+    public static List<Project> parseAllProjectsJSON(String JSONString) throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONObject object = (JSONObject) parser.parse(JSONString);
+        if(object.containsKey("projects")) {
+            List<Project> outputList = new ArrayList<Project>();
+            JSONArray array = (JSONArray) object.get("projects");
+            for (int i = 0; i < array.size(); i++) {
+                outputList.add(projectFromJSONObject((JSONObject) array.get(i)));
+            }
+            return outputList;
+        }
         return null;
     }
 
-    public static Project projectFromJSONObject(JSONObject object){
+    public static Project parseProjectJSON(String JSONString) throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONObject object = (JSONObject) parser.parse(JSONString);
+
+        if(object.containsKey("project")) {
+            JSONObject project = (JSONObject) object.get("project");
+
+            Project outputProject = projectFromJSONObject(project);
+            return outputProject;
+        }
+        return null;
+    }
+
+    public static Task taskFromJSONObject(JSONObject task){
+        if (task.containsKey("id") && task.containsKey("description") && task.containsKey("content")){
+            Task output = new Task();
+            output.setTodoistId((long)task.get("id"));
+            output.setContent(task.get("content").toString());
+            output.setDescription(task.get("description").toString());
+            return output;
+        }
+        return null;
+    }
+
+    public static Project projectFromJSONObject(JSONObject project){
+        if(project.containsKey("id") && project.containsKey("name")){
+            Project output = new Project();
+            output.setTodoistId((long)project.get("id"));
+            output.setName(project.get("name").toString());
+            return output;
+        }
         return null;
     }
 }
