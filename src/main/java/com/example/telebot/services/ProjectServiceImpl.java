@@ -21,11 +21,14 @@ public class ProjectServiceImpl implements ProjectService{
 
     private final UserService userService;
 
+    private final TaskService taskService;
+
     @Autowired
-    public ProjectServiceImpl(TodoistConnector connector, ProjectDAO projectDAO, UserService userService) {
+    public ProjectServiceImpl(TodoistConnector connector, ProjectDAO projectDAO, UserService userService, TaskService taskService) {
         this.connector = connector;
         this.projectDAO = projectDAO;
         this.userService = userService;
+        this.taskService = taskService;
     }
 
     //создаёт проект в todoist и добавляет его в БД
@@ -65,14 +68,15 @@ public class ProjectServiceImpl implements ProjectService{
         return output;
     }
 
-    //выбор проекта из проектов юзера в todoist и добавление его в бд
+    //выбор проекта из проектов юзера в todoist и добавление его с задачами в бд
     @Override
     public Project select(long projectTodoistId, long userId) throws IOException, ParseException {
-        Project selectedProject = Converter.parseProjectJSON(
-                connector.getProject(userService.getToken(userId), projectTodoistId));
+        String input = connector.getProjectAndTasks(userService.getToken(userId), projectTodoistId);
+        Project selectedProject = Converter.parseProjectJSON(input);
         selectedProject.setUserId(userId);
         selectedProject.setFavourite(false);
-        projectDAO.save(selectedProject);
+        selectedProject = projectDAO.save(selectedProject);
+        taskService.addTasksToDB(input, selectedProject.getId());
         return selectedProject;
     }
 

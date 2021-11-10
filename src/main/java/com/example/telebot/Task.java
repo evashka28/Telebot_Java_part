@@ -1,6 +1,7 @@
 package com.example.telebot;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Entity
 @Table (name = "tasks")
@@ -20,9 +21,9 @@ public class Task implements Serializable {
     @Column(name = "favourite")
     private boolean favourite;
     @Column(name = "creation_datetime")
-    private String creationDatetime;
+    private Timestamp creationDatetime;
     @Column(name = "last_access_datetime")
-    private String lastAccessDatetime;
+    private Timestamp lastAccessDatetime;
 
 
     public Task(long id, String description, String content, boolean favourite){
@@ -56,11 +57,11 @@ public class Task implements Serializable {
 
     public boolean getFavourite() { return favourite; }
 
-    public String getCreationDatetime() {
+    public Timestamp getCreationDatetime() {
         return creationDatetime;
     }
 
-    public String getLastAccessDatetime() {
+    public Timestamp getLastAccessDatetime() {
         return lastAccessDatetime;
     }
 
@@ -80,7 +81,7 @@ public class Task implements Serializable {
         this.content = content;
     }
 
-    public void setCreationDatetime(String creationDatetime) {
+    public void setCreationDatetime(Timestamp creationDatetime) {
         this.creationDatetime = creationDatetime;
     }
 
@@ -88,7 +89,7 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public void setLastAccessDatetime(String lastAccessDatetime) {
+    public void setLastAccessDatetime(Timestamp lastAccessDatetime) {
         this.lastAccessDatetime = lastAccessDatetime;
     }
 

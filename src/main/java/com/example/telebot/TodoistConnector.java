@@ -51,10 +51,18 @@ public class TodoistConnector {
     }
 
     //get-запрос получает проект по id
-    public String getProject(String token, long projectId) throws IOException, ParseException {
+    public String getProject(String token, long projectId) throws IOException {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("project_id", projectId);
         String response = GETRequest("https://api.todoist.com/sync/v8/projects/get?", params, token);
+        return response;
+    }
+
+    //get-запрос получает проект по id
+    public String getProjectAndTasks(String token, long projectId) throws IOException {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("project_id", projectId);
+        String response = GETRequest("https://api.todoist.com/sync/v8/projects/get_data?", params, token);
         return response;
     }
 

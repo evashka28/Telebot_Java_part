@@ -35,6 +35,25 @@ public class User implements Serializable {
 
     public String getName(){ return name; }
 
+    public String getSyncToken() {
+        return syncToken;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSyncToken(String syncToken) {
+        this.syncToken = syncToken;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     @Override
     public String toString(){

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class TaskServiceImpl implements TaskService {
     public Task create(Task task, long userId) throws IOException {
         long projectId = (task.getFavourite() ? userService.getProjectFavouritesId(userId) : userService.getProjectId(userId));
         connector.createTask(userService.getToken(userId), task.getContent(), task.getDescription(), projectId);
+        task.setCreationDatetime(Timestamp.from(Instant.now()));
+        task.setLastAccessDatetime(Timestamp.from(Instant.now()));
         return taskDAO.save(task);
     }
 
@@ -76,6 +80,17 @@ public class TaskServiceImpl implements TaskService {
     public void complete(long id, long userId) throws IOException {
         taskDAO.delete(taskDAO.findById(id));
         connector.completeTask(userService.getToken(userId), id);
+    }
+
+    //вызывается в select в ProjectService добавляет задачи в БД из JSON
+    public void addTasksToDB(String input, long projectId) throws ParseException {
+        List<Task> tasks = Converter.parseAllTasksJSON(input);
+        for(Task task: tasks){
+            task.setProjectId(projectId);
+            task.setCreationDatetime(Timestamp.from(Instant.now()));
+            task.setLastAccessDatetime(Timestamp.from(Instant.now()));
+            taskDAO.save(task);
+        }
     }
 
     //получение задачи из БД и добавление информации из todoist
