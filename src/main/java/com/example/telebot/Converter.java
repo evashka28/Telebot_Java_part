@@ -1,5 +1,7 @@
 package com.example.telebot;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -97,5 +99,18 @@ public class Converter {
             return output;
         }
         return null;
+    }
+
+    public static MutablePair<Long, String> parseProjectOrTaskCreation(String input, String tempId) throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONObject object = (JSONObject) parser.parse(input);
+        MutablePair<Long, String> output = new MutablePair<Long, String>();
+        if(object.containsKey("temp_id_mapping")) {
+            output.setLeft(Long.parseLong(((JSONObject)object.get("temp_id_mapping")).get(tempId).toString()));
+        }
+        if(object.containsKey("sync_token")){
+            output.setRight(object.get("sync_token").toString());
+        }
+        return output;
     }
 }

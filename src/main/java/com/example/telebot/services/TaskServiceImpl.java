@@ -1,11 +1,14 @@
 package com.example.telebot.services;
 
 import com.example.telebot.Converter;
+import com.example.telebot.Project;
 import com.example.telebot.Task;
 import com.example.telebot.TodoistConnector;
 import com.example.telebot.dao.TaskDAO;
+import org.apache.commons.lang3.tuple.Pair;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,30 +16,41 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TaskServiceImpl implements TaskService {
     private final TodoistConnector connector;
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
+
+    private final ProjectService projectService;
 
     private final TaskDAO taskDAO;
 
     @Autowired
-    public TaskServiceImpl(TodoistConnector connector, UserServiceImpl userService, TaskDAO taskDAO){
+    public TaskServiceImpl(TodoistConnector connector, @Lazy UserService userService, @Lazy ProjectService projectService, TaskDAO taskDAO){
         this.connector = connector;
         this.userService = userService;
+        this.projectService = projectService;
         this.taskDAO = taskDAO;
     }
 
     //создаёт задачу и добавляет в БД
     @Override
-    public Task create(Task task, long userId) throws IOException {
-        long projectId = (task.getFavourite() ? userService.getProjectFavouritesId(userId) : userService.getProjectId(userId));
-        connector.createTask(userService.getToken(userId), task.getContent(), task.getDescription(), projectId);
+    public Task create(Task task, long userId) throws IOException, ParseException {
+        String tempId = UUID.randomUUID().toString();
+
+        Project project = (task.getFavourite() ? projectService.getUserFavouriteProject(userId) : projectService.getUserProject(userId));
+        String response =  connector.createTask(userService.getToken(userId), task.getContent(), task.getDescription(), project.getTodoistId(), tempId);
+        Pair<Long, String> idAndSyncToken = Converter.parseProjectOrTaskCreation(response, tempId);
+        task.setProjectId(project.getId());
+        task.setTodoistId(idAndSyncToken.getLeft());
         task.setCreationDatetime(Timestamp.from(Instant.now()));
         task.setLastAccessDatetime(Timestamp.from(Instant.now()));
         return taskDAO.save(task);
+
+
     }
 
     //возвращает все задачи пользователя
@@ -71,15 +85,17 @@ public class TaskServiceImpl implements TaskService {
     //удаление задачи из БД и todoist
     @Override
     public void delete(long id, long userId) throws IOException {
-        taskDAO.delete(taskDAO.findById(id));
-        connector.deleteTask(userService.getToken(userId), id);
+        Task task = taskDAO.findById(id);
+        taskDAO.delete(task);
+        connector.deleteTask(userService.getToken(userId), task.getTodoistId());
     }
 
     //завершение задачи и удаление из БД
     @Override
     public void complete(long id, long userId) throws IOException {
-        taskDAO.delete(taskDAO.findById(id));
-        connector.completeTask(userService.getToken(userId), id);
+        Task task = taskDAO.findById(id);
+        taskDAO.delete(task);
+        connector.completeTask(userService.getToken(userId), task.getTodoistId());
     }
 
     //вызывается в select в ProjectService добавляет задачи в БД из JSON
@@ -90,6 +106,14 @@ public class TaskServiceImpl implements TaskService {
             task.setCreationDatetime(Timestamp.from(Instant.now()));
             task.setLastAccessDatetime(Timestamp.from(Instant.now()));
             taskDAO.save(task);
+        }
+    }
+
+    @Override
+    public void deleteTasksFromDBByProjectId(long projectId) {
+        List<Task> tasks = taskDAO.getAllByProjectId(projectId);
+        for(Task task: tasks){
+            taskDAO.delete(task);
         }
     }
 

@@ -1,4 +1,7 @@
 package com.example.telebot;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -21,8 +24,10 @@ public class Task implements Serializable {
     @Column(name = "favourite")
     private boolean favourite;
     @Column(name = "creation_datetime")
+    @JsonIgnore
     private Timestamp creationDatetime;
     @Column(name = "last_access_datetime")
+    @JsonIgnore
     private Timestamp lastAccessDatetime;
 
 

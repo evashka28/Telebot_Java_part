@@ -32,13 +32,13 @@ public class ProjectController {
     }
 
     @PostMapping(value = "project")
-    public void createProject(@RequestBody Project newProject, @RequestHeader long userId){
-
+    public Project createProject(@RequestBody Project newProject, @RequestHeader long userId) throws IOException, ParseException {
+        return service.create(newProject, userId);
     }
 
     @DeleteMapping(value = "project/{id}")
-    public void deleteProject(@PathVariable long id, @RequestHeader long userId){
-
+    public void deleteProject(@PathVariable long id, @RequestHeader long userId) throws IOException {
+        service.delete(id, userId);
     }
 
     @PostMapping(value = "project/selected/{id}")
@@ -47,6 +47,6 @@ public class ProjectController {
     }
     @DeleteMapping(value = "project/selected/{id}")
     public void deselectProject(@PathVariable long id){
-
+        service.deselect(id);
     }
 }

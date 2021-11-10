@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface TaskService {
-    public Task create(Task task, long userId) throws IOException;
+    public Task create(Task task, long userId) throws IOException, ParseException;
 
     public List<Task> all(long userId) throws IOException, ParseException;
 
@@ -21,4 +21,6 @@ public interface TaskService {
     public void complete(long id, long userId) throws IOException;
 
     public void addTasksToDB(String input, long projectId) throws ParseException;
+
+    public void deleteTasksFromDBByProjectId(long projectId);
 }

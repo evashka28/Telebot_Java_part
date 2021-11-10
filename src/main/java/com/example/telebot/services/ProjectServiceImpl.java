@@ -4,13 +4,16 @@ import com.example.telebot.Converter;
 import com.example.telebot.Project;
 import com.example.telebot.TodoistConnector;
 import com.example.telebot.dao.ProjectDAO;
+import org.apache.commons.lang3.tuple.Pair;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProjectServiceImpl implements ProjectService{
@@ -24,7 +27,7 @@ public class ProjectServiceImpl implements ProjectService{
     private final TaskService taskService;
 
     @Autowired
-    public ProjectServiceImpl(TodoistConnector connector, ProjectDAO projectDAO, UserService userService, TaskService taskService) {
+    public ProjectServiceImpl(TodoistConnector connector, ProjectDAO projectDAO, @Lazy UserService userService, @Lazy TaskService taskService) {
         this.connector = connector;
         this.projectDAO = projectDAO;
         this.userService = userService;
@@ -34,10 +37,13 @@ public class ProjectServiceImpl implements ProjectService{
     //создаёт проект в todoist и добавляет его в БД
     @Override
     public Project create(Project project, long userId) throws IOException, ParseException {
-        Project createdProject = Converter.parseProjectJSON(
-                connector.createProject(userService.getToken(userId), project.getName()));
-        projectDAO.save(createdProject);
-        return createdProject;
+        String tempId = UUID.randomUUID().toString();
+
+        String response = connector.createProject(userService.getToken(userId), project.getName(), tempId);
+        Pair<Long, String> idAndSyncToken = Converter.parseProjectOrTaskCreation(response, tempId);
+        project.setTodoistId(idAndSyncToken.getLeft());
+        project.setUserId(userId);
+        return projectDAO.save(project);
     }
 
     //обновляет проект в БД и todoist
@@ -81,15 +87,18 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     //удаление проекта и всех задач из БД
-
-    public void deselect(long projectId, long userId){
-
+    @Override
+    public void deselect(long projectId){
+        taskService.deleteTasksFromDBByProjectId(projectId);
+        Project project = projectDAO.findById(projectId);
+        projectDAO.delete(project);
     }
 
     //удаление проекта и всех задач из БД и todoist
     @Override
-    public void delete() {
-
+    public void delete(long projectId, long userId) throws IOException {
+        connector.deleteProject(userService.getToken(userId), projectDAO.findById(projectId).getTodoistId());
+        deselect(projectId);
     }
 
     //получение проекта из БД и добавление информации из todoist
@@ -110,5 +119,18 @@ public class ProjectServiceImpl implements ProjectService{
                 i.remove();
         }
         return projects;
+    }
+
+    public Project getUserProject(long userId){
+        Project output = projectDAO.getProjectByUserId(userId, false);
+        return output;
+    }
+
+    public Project getUserFavouriteProject(long userId){
+        Project output = projectDAO.getProjectByUserId(userId, true);
+        if(output == null) {
+            output = projectDAO.getProjectByUserId(userId, false);
+        }
+        return output;
     }
 }
