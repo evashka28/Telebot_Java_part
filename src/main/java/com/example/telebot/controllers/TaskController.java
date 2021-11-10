@@ -29,6 +29,11 @@ public class TaskController {
         return service.get(userId, id);
     }
 
+    @GetMapping(value = "/task", produces = "application/json")
+    Task getTask(@RequestHeader long userId) throws IOException, ParseException {
+        return service.get(userId);
+    }
+
     @PostMapping(value = "/task", consumes = "application/json", produces = "application/json")
     Task newTask(@RequestBody Task newTask, @RequestHeader long userId) throws IOException, ParseException {
         return service.create(newTask, userId);

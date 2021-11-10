@@ -5,9 +5,17 @@ import com.example.telebot.Task;
 import com.example.telebot.utils.HibernateSessionFactoryUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +37,9 @@ public class TaskDAO extends AbstractDAO<Task>{
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Criteria criteria = session.createCriteria(Task.class);
         Task output = (Task) criteria.add(Restrictions.eq("projectId", projectId))
-                .setProjection(Projections.max("lastAccessDatetime")).uniqueResult();
+                .addOrder(Order.asc("lastAccessDatetime"))
+                .setMaxResults(1)
+                .uniqueResult();
         session.close();
         return output;
     }

@@ -14,6 +14,8 @@ public interface TaskService {
 
     public Task get(long userId, long taskId) throws IOException, ParseException;
 
+    public Task get(long userId) throws IOException, ParseException;
+
     public Task update(long id, Task task, long userId) throws IOException;
 
     public void delete(long id, long userId) throws IOException;

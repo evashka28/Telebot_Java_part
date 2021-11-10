@@ -74,6 +74,15 @@ public class TaskServiceImpl implements TaskService {
         return Converter.parseTaskJSON(connector.getTask(userService.getToken(userId), id));
     }
 
+    @Override
+    public Task get(long userId) throws IOException, ParseException {
+        Task task = taskDAO.getWithOldestLastAccessByProjectId(projectService.getUserProject(userId).getId());
+        task.setLastAccessDatetime(Timestamp.from(Instant.now()));
+        taskDAO.update(task);
+        task = mergeTask(task, userId);
+        return task;
+    }
+
     //обновление задачи в БД и todoist
     @Override
     public Task update(long id, Task task, long userId) throws IOException {
@@ -119,7 +128,7 @@ public class TaskServiceImpl implements TaskService {
 
     //получение задачи из БД и добавление информации из todoist
     public Task mergeTask(Task task, long userId) throws IOException, ParseException {
-        Task compareTask = get(task.getTodoistId(), userId);
+        Task compareTask = get(userId, task.getTodoistId());
         if(compareTask == null)
             return null;
         task.setDescription(compareTask.getDescription());
