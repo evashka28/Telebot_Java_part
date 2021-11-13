@@ -1,5 +1,7 @@
 package com.example.telebot;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -11,6 +13,7 @@ public class Project implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "user_id")
+    @JsonIgnore
     private long userId;
     @Column(name = "todoist_id")
     private long todoistId;

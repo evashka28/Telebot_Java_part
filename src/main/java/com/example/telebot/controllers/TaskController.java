@@ -1,5 +1,6 @@
 package com.example.telebot.controllers;
 
+import com.example.telebot.Tag;
 import com.example.telebot.Task;
 import com.example.telebot.services.TaskService;
 import org.json.simple.parser.ParseException;
@@ -35,12 +36,12 @@ public class TaskController {
     }
 
     @PostMapping(value = "/task", consumes = "application/json", produces = "application/json")
-    Task newTask(@RequestBody Task newTask, @RequestHeader long userId) throws IOException, ParseException {
+    Task newTask(@RequestBody Task newTask, @RequestBody List<Long> tagsIds, @RequestHeader long userId) throws IOException, ParseException {
         return service.create(newTask, userId);
     }
 
     @PutMapping(value = "/task/{id}", consumes = "application/json", produces = "application/json")
-    Task updateTask(@PathVariable long id, @RequestBody Task updatedTask, @RequestHeader long userId) throws IOException {
+    Task updateTask(@PathVariable long id, @RequestBody Task updatedTask, @RequestBody List<Long> tagsIds, @RequestHeader long userId) throws IOException {
         return service.update(id, updatedTask, userId);
     }
 
