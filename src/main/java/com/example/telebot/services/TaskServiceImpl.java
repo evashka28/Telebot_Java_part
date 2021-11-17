@@ -71,7 +71,7 @@ public class TaskServiceImpl implements TaskService {
     //возвращает задачу, которая есть в БД
     @Override
     public Task get(long userId, long id) throws IOException, ParseException {
-        return Converter.parseTaskJSON(connector.getTask(userService.getToken(userId), id));
+        return Converter.parseTaskJSON(connector.getTask(userService.getToken(userId), taskDAO.findById(id).getTodoistId()));
     }
 
     @Override
