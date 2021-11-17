@@ -36,7 +36,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "/task", consumes = "application/json", produces = "application/json")
-    Task newTask(@RequestBody Task newTask, @RequestBody List<Long> tagsIds, @RequestHeader long userId) throws IOException, ParseException {
+    Task newTask(@RequestBody Task newTask, @RequestParam(defaultValue = "") List<Long> tagsIds, @RequestHeader long userId) throws IOException, ParseException {
         return service.create(newTask, userId);
     }
 

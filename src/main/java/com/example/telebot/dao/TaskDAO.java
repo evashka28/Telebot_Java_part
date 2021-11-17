@@ -25,22 +25,41 @@ public class TaskDAO extends AbstractDAO<Task>{
         setClazz(Task.class);
     }
 
-    public List<Task> getAllByProjectId(long projectId){
+    public List<Task> getAllByProjectId(long projectId, boolean favourite){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(Task.class);
-        ArrayList<Task> output = (ArrayList<Task>) criteria.add(Restrictions.eq("projectId", projectId)).list();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Task> criteriaQuery = criteriaBuilder.createQuery(Task.class);
+        Root<Task> root = criteriaQuery.from(Task.class);
+
+        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("projectId"), projectId));
+
+        Query<Task> query = session.createQuery(criteriaQuery);
+
+        List<Task> output = query.getResultList();
+
         session.close();
         return output;
     }
 
+    public List<Task> getAllByProjectId(long projectId){
+        return getAllByProjectId(projectId, false);
+    }
+
     public Task getWithOldestLastAccessByProjectId(long projectId){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Criteria criteria = session.createCriteria(Task.class);
-        Task output = (Task) criteria.add(Restrictions.eq("projectId", projectId))
-                .addOrder(Order.asc("lastAccessDatetime"))
-                .setMaxResults(1)
-                .uniqueResult();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Task> criteriaQuery = criteriaBuilder.createQuery(Task.class);
+        Root<Task> root = criteriaQuery.from(Task.class);
+
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        predicates.add(criteriaBuilder.equal(root.get("projectId"), projectId));;
+
+        Query<Task> query = session.createQuery(criteriaQuery);
+
+        Task output = query.getSingleResult();
+
         session.close();
+
         return output;
     }
 }

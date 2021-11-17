@@ -2,15 +2,17 @@ package com.example.telebot.services;
 
 import com.example.telebot.Tag;
 
+import java.util.List;
+
 public interface TagService {
 
-    Tag create();
+    Tag create(Tag tag, long userId);
 
-    Tag update();
+    Tag update(Tag tag, long userId);
 
-    Tag delete();
+    void delete(Tag tag, long userId);
 
-    Tag get();
+    Tag get(long id, long userId);
 
-    Tag all();
+    List<Tag> all(long userId);
 }

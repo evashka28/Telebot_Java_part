@@ -5,6 +5,8 @@ import com.example.telebot.dao.TagDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TagServiceImpl implements TagService{
     private final TagDAO tagDAO;
@@ -16,27 +18,30 @@ public class TagServiceImpl implements TagService{
 
 
     @Override
-    public Tag create() {
-        return null;
+    public Tag create(Tag tag, long userId) {
+        tag.setUserId(userId);
+        return tagDAO.save(tag);
     }
 
     @Override
-    public Tag update() {
-        return null;
+    public Tag update(Tag tag, long userId) {
+        tag.setId(userId);
+        return tagDAO.update(tag);
     }
 
     @Override
-    public Tag delete() {
-        return null;
+    public void delete(Tag tag, long userId) {
+        tag.setId(userId);
+        tagDAO.delete(tag);
     }
 
     @Override
-    public Tag get() {
-        return null;
+    public Tag get(long id, long userId) {
+        return tagDAO.findById(id);
     }
 
     @Override
-    public Tag all() {
+    public List<Tag> all(long userId) {
         return null;
     }
 }

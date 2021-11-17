@@ -33,12 +33,14 @@ public class Task implements Serializable {
     @JsonIgnore
     private Timestamp lastAccessDatetime;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "task_tag",
-            joinColumns = {@JoinColumn(name = "task_id")},
-            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
-    )
+//    @ManyToMany(cascade = {CascadeType.ALL})
+//    @JoinTable(
+//            name = "task_tag",
+//            joinColumns = {@JoinColumn(name = "task_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
+//    )
+    @Transient
+    @JsonIgnore
     private Set<Tag> tags;
 
     public Task(long id, String description, String content, boolean favourite){
