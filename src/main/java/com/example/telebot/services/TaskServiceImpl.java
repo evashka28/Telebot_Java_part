@@ -56,9 +56,8 @@ public class TaskServiceImpl implements TaskService {
     //возвращает все задачи пользователя
     @Override
     public List<Task> all(long userId) throws IOException, ParseException {
-        //String requestResponse =
-        return null;
-        //return connector.getAllTasks(service.getToken(userId), Arrays.asList(5278795244L, 5278654858L));
+
+        return allFromProject(userId, projectService.getUserProject(userId).getId());
     }
 
     //возвращает все задачи из проекта, находящееся в БД
@@ -128,7 +127,7 @@ public class TaskServiceImpl implements TaskService {
 
     //получение задачи из БД и добавление информации из todoist
     public Task mergeTask(Task task, long userId) throws IOException, ParseException {
-        Task compareTask = get(userId, task.getTodoistId());
+        Task compareTask = get(userId, task.getId());
         if(compareTask == null)
             return null;
         task.setDescription(compareTask.getDescription());
