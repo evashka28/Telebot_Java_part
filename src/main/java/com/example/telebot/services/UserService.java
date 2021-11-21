@@ -10,7 +10,11 @@ public interface UserService {
 
     User update(User user, long userId);
 
+    User getUser(long userId);
+
     String getToken(long id);
+
+    void deleteUser(long id);
 
     long getProjectId(long id);
 
