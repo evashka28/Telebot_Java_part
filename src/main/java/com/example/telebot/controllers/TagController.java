@@ -9,33 +9,35 @@ import java.util.List;
 
 @RestController
 public class TagController {
-//    private  final TagService tagService;
-//
-//    @Autowired
-//    public TagController(TagService tagService) {
-//        this.tagService = tagService;
-//    }
-//
-//    @GetMapping
-//    List<Tag> all(){
-//        return null;
-//    }
-//
-//    @GetMapping
-//    Tag get(){
-//        return null;
-//    }
-//
-//    @PostMapping
-//    Tag create(){
-//        return null;
-//    }
-//
-//    @PutMapping
-//    Tag update() {
-//        return null;
-//    }
-//
-//    @DeleteMapping
-//    void delete() {}
+    private  final TagService tagService;
+
+    @Autowired
+    public TagController(TagService tagService) {
+        this.tagService = tagService;
+    }
+
+    @GetMapping(value = "/tags", produces = "application/json")
+    List<Tag> all(@RequestHeader long userId){
+        return tagService.all(userId);
+    }
+
+    @GetMapping(value = "/tag/{id}", produces = "application/json")
+    Tag get(@PathVariable long id, @RequestHeader long userId){
+        return tagService.get(id, userId);
+    }
+
+    @PostMapping(value = "/tag", produces = "application/json", consumes = "application/json")
+    Tag create(@RequestBody Tag newTag, @RequestHeader long userId){
+        return tagService.create(newTag, userId);
+    }
+
+    @PutMapping(value = "/tag/{id}", produces = "application/json", consumes = "application/json")
+    Tag update(@RequestBody Tag newTag, @RequestHeader long userId) {
+        return tagService.update(newTag, userId);
+    }
+
+    @DeleteMapping(value = "/tag/{id}")
+    void delete(@PathVariable long id, @RequestHeader long userId) {
+        tagService.delete(id, userId);
+    }
 }

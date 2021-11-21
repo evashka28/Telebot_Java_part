@@ -16,7 +16,10 @@ public abstract class AbstractDAO<T extends Serializable>{
     }
 
     public T findById(long id) {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(clazz, id);
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        T output = session.get(clazz, id);
+        session.close();
+        return output;
     }
 
     public T save(T entity) {

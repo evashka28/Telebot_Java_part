@@ -10,9 +10,11 @@ public interface TagService {
 
     Tag update(Tag tag, long userId);
 
-    void delete(Tag tag, long userId);
+    void delete(long tagId, long userId);
 
     Tag get(long id, long userId);
 
     List<Tag> all(long userId);
+
+    List<Tag> getMultipleByIds(List<Long> ids);
 }

@@ -37,12 +37,12 @@ public class TaskController {
 
     @PostMapping(value = "/task", consumes = "application/json", produces = "application/json")
     Task newTask(@RequestBody Task newTask, @RequestParam(defaultValue = "") List<Long> tagsIds, @RequestHeader long userId) throws IOException, ParseException {
-        return service.create(newTask, userId);
+        return service.create(newTask, userId, tagsIds);
     }
 
     @PutMapping(value = "/task/{id}", consumes = "application/json", produces = "application/json")
     Task updateTask(@PathVariable long id, @RequestBody Task updatedTask, @RequestBody List<Long> tagsIds, @RequestHeader long userId) throws IOException {
-        return service.update(id, updatedTask, userId);
+        return service.update(id, updatedTask, userId, tagsIds);
     }
 
     @DeleteMapping(value = "/task/{id}")

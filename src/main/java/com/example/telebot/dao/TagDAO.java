@@ -18,8 +18,18 @@ public class TagDAO extends AbstractDAO<Tag>{
 
     public List<Tag> getAllByUserId(long userId){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("from Tag where userId = :userIdParam");
+        Query query = session.createQuery("select u.tags from User u where u.id = :userIdParam");
         query.setParameter("userIdParam", userId);
+        List<Tag> output = (List<Tag>) query.getResultList();
+
+        session.close();
+        return output;
+    }
+
+    public List<Tag> getMultipleById(List<Long> ids){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Query query = session.createQuery("from Tag where id in :idsParam");
+        query.setParameter("idsParam", ids);
         List<Tag> output = (List<Tag>) query.getResultList();
 
         session.close();

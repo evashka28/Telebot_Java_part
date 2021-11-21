@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getById(long id) {
+        return userDAO.findById(id);
+    }
+
+    @Override
     public long getProjectId(long id) {
         return 2277542643L;
     }

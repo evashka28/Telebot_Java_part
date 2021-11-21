@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,21 +13,21 @@ public class Tag implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "user_id")
-    @JsonIgnore
-    private long userId;
+
     @Column(name = "name")
     private String name;
 
-//    @ManyToMany(mappedBy = "tags")
-//    private Set<Task> tasks;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "tags")
+    private List<Task> tasks;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public long getId() {
         return id;
-    }
-
-    public long getUserId() {
-        return userId;
     }
 
     public String getName() {
@@ -37,11 +38,23 @@ public class Tag implements Serializable {
         this.id = id;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }

@@ -26,28 +26,32 @@ public class TaskServiceImpl implements TaskService {
 
     private final ProjectService projectService;
 
+    private final TagService tagService;
+
     private final TaskDAO taskDAO;
 
     @Autowired
-    public TaskServiceImpl(TodoistConnector connector, @Lazy UserService userService, @Lazy ProjectService projectService, TaskDAO taskDAO){
+    public TaskServiceImpl(TodoistConnector connector, @Lazy UserService userService, @Lazy ProjectService projectService, @Lazy TagService tagService, TaskDAO taskDAO){
         this.connector = connector;
         this.userService = userService;
         this.projectService = projectService;
+        this.tagService = tagService;
         this.taskDAO = taskDAO;
     }
 
     //создаёт задачу и добавляет в БД
     @Override
-    public Task create(Task task, long userId) throws IOException, ParseException {
+    public Task create(Task task, long userId, List<Long> tagIds) throws IOException, ParseException {
         String tempId = UUID.randomUUID().toString();
 
         Project project = (task.getFavourite() ? projectService.getUserFavouriteProject(userId) : projectService.getUserProject(userId));
         String response =  connector.createTask(userService.getToken(userId), task.getContent(), task.getDescription(), project.getTodoistId(), tempId);
         Pair<Long, String> idAndSyncToken = Converter.parseProjectOrTaskCreation(response, tempId);
-        task.setProjectId(project.getId());
+        task.setProject(project);
         task.setTodoistId(idAndSyncToken.getLeft());
         task.setCreationDatetime(Timestamp.from(Instant.now()));
         task.setLastAccessDatetime(Timestamp.from(Instant.now()));
+        task.setTags(tagService.getMultipleByIds(tagIds));
         return taskDAO.save(task);
 
 
@@ -84,7 +88,7 @@ public class TaskServiceImpl implements TaskService {
 
     //обновление задачи в БД и todoist
     @Override
-    public Task update(long id, Task task, long userId) throws IOException {
+    public Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException {
         taskDAO.update(task);
         connector.updateTask(userService.getToken(userId),  task.getContent(), task.getDescription(), id);
         return task;
@@ -107,10 +111,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     //вызывается в select в ProjectService добавляет задачи в БД из JSON
-    public void addTasksToDB(String input, long projectId) throws ParseException {
+    public void addTasksToDB(String input, Project project) throws ParseException {
         List<Task> tasks = Converter.parseAllTasksJSON(input);
         for(Task task: tasks){
-            task.setProjectId(projectId);
+            task.setProject(project);
             task.setCreationDatetime(Timestamp.from(Instant.now()));
             task.setLastAccessDatetime(Timestamp.from(Instant.now()));
             taskDAO.save(task);

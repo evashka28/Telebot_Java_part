@@ -11,27 +11,30 @@ import java.util.List;
 public class TagServiceImpl implements TagService{
     private final TagDAO tagDAO;
 
+    private final UserService userService;
+
     @Autowired
-    public TagServiceImpl(TagDAO tagDAO) {
+    public TagServiceImpl(TagDAO tagDAO, UserService userService) {
         this.tagDAO = tagDAO;
+        this.userService = userService;
     }
 
 
     @Override
     public Tag create(Tag tag, long userId) {
-        tag.setUserId(userId);
+        tag.setUser(userService.getById(userId));
         return tagDAO.save(tag);
     }
 
     @Override
     public Tag update(Tag tag, long userId) {
-        tag.setId(userId);
+        tag.setUser(userService.getById(userId));
         return tagDAO.update(tag);
     }
 
     @Override
-    public void delete(Tag tag, long userId) {
-        tag.setId(userId);
+    public void delete(long tagId, long userId) {
+        Tag tag = tagDAO.findById(tagId);
         tagDAO.delete(tag);
     }
 
@@ -42,6 +45,11 @@ public class TagServiceImpl implements TagService{
 
     @Override
     public List<Tag> all(long userId) {
-        return null;
+        return tagDAO.getAllByUserId(userId);
+    }
+
+    @Override
+    public List<Tag> getMultipleByIds(List<Long> ids) {
+        return tagDAO.getMultipleById(ids);
     }
 }

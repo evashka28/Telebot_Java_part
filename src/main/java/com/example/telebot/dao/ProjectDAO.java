@@ -26,7 +26,7 @@ public class ProjectDAO extends AbstractDAO<Project>{
     public List<Project> getAllByUserId(long userId)
     {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("from Project where userId = :userIdParam");
+        Query query = session.createQuery("select u.projects from User u where u.id = :userIdParam");
         query.setParameter("userIdParam", userId);
         List<Project> output = (List<Project>) query.getResultList();
         session.close();
@@ -35,8 +35,9 @@ public class ProjectDAO extends AbstractDAO<Project>{
 
     public Project getProjectByUserId(long userId, boolean favourite){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("from Project where userId = :userIdParam " +
-                "and favourite = :favouriteParam");
+        Query query = session.createQuery("select u.projects from User u " +
+                "inner join u.projects p " +
+                "where u.id = :userIdParam and p.favourite = :favouriteParam");
         query.setParameter("userIdParam", userId);
         query.setParameter("favouriteParam", favourite);
         query.setMaxResults(1);

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,13 +17,15 @@ public class Task implements Serializable {
     private long id;
     @Column(name = "todoist_id")
     private long todoistId;
-    @Column(name = "project_id")
-    @JsonIgnore
-    private long projectId;
     @Transient
     private String description;
     @Transient
     private String content;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    private Project project;
 
     @Column(name = "favourite")
     private boolean favourite;
@@ -33,15 +36,14 @@ public class Task implements Serializable {
     @JsonIgnore
     private Timestamp lastAccessDatetime;
 
-//    @ManyToMany(cascade = {CascadeType.ALL})
-//    @JoinTable(
-//            name = "task_tag",
-//            joinColumns = {@JoinColumn(name = "task_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
-//    )
-    @Transient
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "task_tag",
+            joinColumns = {@JoinColumn(name = "task_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
+    )
     @JsonIgnore
-    private Set<Tag> tags;
+    private List<Tag> tags;
 
     public Task(long id, String description, String content, boolean favourite){
         this.id = id;
@@ -60,10 +62,6 @@ public class Task implements Serializable {
         return todoistId;
     }
 
-    public long getProjectId() {
-        return projectId;
-    }
-
     public String getDescription(){
         return description;
     }
@@ -80,6 +78,10 @@ public class Task implements Serializable {
 
     public Timestamp getLastAccessDatetime() {
         return lastAccessDatetime;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
     }
 
     public void setId(long id) {
@@ -110,8 +112,12 @@ public class Task implements Serializable {
         this.lastAccessDatetime = lastAccessDatetime;
     }
 
-    public void setProjectId(long projectId) {
-        this.projectId = projectId;
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Override

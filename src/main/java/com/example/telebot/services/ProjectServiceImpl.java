@@ -42,7 +42,7 @@ public class ProjectServiceImpl implements ProjectService{
         String response = connector.createProject(userService.getToken(userId), project.getName(), tempId);
         Pair<Long, String> idAndSyncToken = Converter.parseProjectOrTaskCreation(response, tempId);
         project.setTodoistId(idAndSyncToken.getLeft());
-        project.setUserId(userId);
+        project.setUser(userService.getById(userId));
         return projectDAO.save(project);
     }
 
@@ -79,10 +79,10 @@ public class ProjectServiceImpl implements ProjectService{
     public Project select(long projectTodoistId, long userId) throws IOException, ParseException {
         String input = connector.getProjectAndTasks(userService.getToken(userId), projectTodoistId);
         Project selectedProject = Converter.parseProjectJSON(input);
-        selectedProject.setUserId(userId);
+        selectedProject.setUser(userService.getById(userId));
         selectedProject.setFavourite(false);
         selectedProject = projectDAO.save(selectedProject);
-        taskService.addTasksToDB(input, selectedProject.getId());
+        taskService.addTasksToDB(input, selectedProject);
         return selectedProject;
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "projects")
@@ -12,9 +13,6 @@ public class Project implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "user_id")
-    @JsonIgnore
-    private long userId;
     @Column(name = "todoist_id")
     private long todoistId;
     @Column(name = "favourite")
@@ -22,11 +20,19 @@ public class Project implements Serializable {
     @Transient
     private String name;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "project", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Task> tasks;
+
     public Project(){}
 
-    public Project(long id, long userId, long todoistId, boolean favourite) {
+    public Project(long id, long todoistId, boolean favourite) {
         this.id = id;
-        this.userId = userId;
         this.todoistId = todoistId;
         this.favourite = favourite;
     }
@@ -37,10 +43,6 @@ public class Project implements Serializable {
 
     public long getTodoistId() {
         return todoistId;
-    }
-
-    public long getUserId() {
-        return userId;
     }
 
     public String getName() {
@@ -59,15 +61,19 @@ public class Project implements Serializable {
         this.todoistId = todoistId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

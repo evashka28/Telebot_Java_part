@@ -28,7 +28,7 @@ public class TaskDAO extends AbstractDAO<Task>{
 
     public List<Task> getAllByProjectId(long projectId, boolean favourite){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("from Task where projectId = :projectIdParam " +
+        Query query = session.createQuery("select Project.tasks from Project p where p.id = :projectIdParam " +
                 "and favourite = :favouriteParam");
         query.setParameter("projectIdParam", projectId);
         query.setParameter("favouriteParam", favourite);
@@ -44,11 +44,14 @@ public class TaskDAO extends AbstractDAO<Task>{
 
     public Task getWithOldestLastAccessByProjectId(long projectId){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("from Task where projectId = :projectIdParam " +
-                "and favourite = :favouriteParam " +
-                "and lastAccessDatetime = " +
-                "(SELECT min(lastAccessDatetime) from Task where projectId = :projectIdParam " +
-                "and favourite = :favouriteParam)");
+
+        Query query = session.createQuery("select p.tasks from Project p " +
+                "inner join p.tasks t " +
+                "where p.id = :projectIdParam " +
+                "and t.favourite = :favouriteParam " +
+                "and t.lastAccessDatetime = (select min(lastAccessDatetime) from t " +
+                "where p.id = :projectIdParam " +
+                "and t.favourite = :favouriteParam)");
         query.setParameter("projectIdParam", projectId);
         query.setParameter("favouriteParam", false);
         query.setMaxResults(1);
