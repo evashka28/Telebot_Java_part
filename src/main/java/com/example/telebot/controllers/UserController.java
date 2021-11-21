@@ -22,8 +22,18 @@ public class UserController {
         return service.create(newUser);
     }
 
+    @GetMapping(value = "/user/{id}")
+    public User getUser(@PathVariable long id){
+        return service.getUser(id);
+    }
+
     @PutMapping(value = "/user/{id}", consumes = "application/json", produces = "application/json")
     public User updateUser(@RequestBody User updatedUser, @PathVariable long id){
         return service.update(updatedUser, id);
+    }
+
+    @DeleteMapping(value = "/user/{id}")
+    public void deleteUser(@PathVariable long id){
+        service.deleteUser(id);
     }
 }

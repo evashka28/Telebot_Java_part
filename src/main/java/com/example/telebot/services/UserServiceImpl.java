@@ -1,6 +1,7 @@
 package com.example.telebot.services;
 
 
+import com.example.telebot.Task;
 import com.example.telebot.TodoistConnector;
 import com.example.telebot.User;
 import com.example.telebot.dao.UserDAO;
@@ -27,9 +28,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUser(long userId){
+        User user = userDAO.findById(userId);
+        userDAO.delete(user);
+    }
+
+    @Override
     public User update(User user, long userId) {
         return userDAO.update(user);
     }
+
+    @Override
+    public User getUser(long userId) {
+        return userDAO.findById(userId);
+    }
+
+
 
     @Override
     public String getToken(long id) {
