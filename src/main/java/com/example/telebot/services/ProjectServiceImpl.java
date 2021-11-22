@@ -133,4 +133,9 @@ public class ProjectServiceImpl implements ProjectService{
         }
         return output;
     }
+
+    @Override
+    public List<Long> getAllTodoistIds(long userId) {
+        return projectDAO.getAllTodoistIdsByUserId(userId);
+    }
 }

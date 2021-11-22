@@ -56,13 +56,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public long getProjectId(long id) {
-        return 2277542643L;
-    }
-
-    @Override
-    public long getProjectFavouritesId(long id) {
-        return 2277542644L;
+    public String getSyncTokenByUserId(long id) {
+        return userDAO.findById(id).getSyncToken();
     }
 
 

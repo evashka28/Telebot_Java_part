@@ -35,13 +35,18 @@ public class TaskController {
         return service.get(userId);
     }
 
+    @GetMapping(value = "/task/tag/{tagId}", produces = "application/json")
+    List<Task> getTaskByTagId(@PathVariable long tagId, @RequestHeader long userId) throws IOException, ParseException {
+        return service.allByTag(userId, tagId);
+    }
+
     @PostMapping(value = "/task", consumes = "application/json", produces = "application/json")
     Task newTask(@RequestBody Task newTask, @RequestParam(defaultValue = "") List<Long> tagsIds, @RequestHeader long userId) throws IOException, ParseException {
         return service.create(newTask, userId, tagsIds);
     }
 
     @PutMapping(value = "/task/{id}", consumes = "application/json", produces = "application/json")
-    Task updateTask(@PathVariable long id, @RequestBody Task updatedTask, @RequestBody List<Long> tagsIds, @RequestHeader long userId) throws IOException {
+    Task updateTask(@PathVariable long id, @RequestBody Task updatedTask, @RequestParam(defaultValue = "") List<Long> tagsIds, @RequestHeader long userId) throws IOException {
         return service.update(id, updatedTask, userId, tagsIds);
     }
 

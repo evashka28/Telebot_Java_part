@@ -9,21 +9,25 @@ import java.io.IOException;
 import java.util.List;
 
 public interface TaskService {
-    public Task create(Task task, long userId, List<Long> tagIds) throws IOException, ParseException;
+    Task create(Task task, long userId, List<Long> tagIds) throws IOException, ParseException;
 
-    public List<Task> all(long userId) throws IOException, ParseException;
+    List<Task> all(long userId) throws IOException, ParseException;
 
-    public Task get(long userId, long taskId) throws IOException, ParseException;
+    List<Task> allByTag(long userId, long tagId) throws IOException, ParseException;
 
-    public Task get(long userId) throws IOException, ParseException;
+    Task get(long userId, long taskId) throws IOException, ParseException;
 
-    public Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException;
+    Task get(long userId) throws IOException, ParseException;
 
-    public void delete(long id, long userId) throws IOException;
+    Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException;
 
-    public void complete(long id, long userId) throws IOException;
+    void delete(long id, long userId) throws IOException;
 
-    public void addTasksToDB(String input, Project project) throws ParseException;
+    void complete(long id, long userId) throws IOException;
 
-    public void deleteTasksFromDBByProjectId(long projectId);
+    void addTasksToDB(String input, Project project) throws ParseException;
+
+    void deleteTasksFromDBByProjectId(long projectId);
+
+    List<Long> getAllTodoistIds(long userId);
 }

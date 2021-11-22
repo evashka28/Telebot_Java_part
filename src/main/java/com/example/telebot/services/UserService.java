@@ -18,7 +18,5 @@ public interface UserService {
 
     User getById(long id);
 
-    long getProjectId(long id);
-
-    long getProjectFavouritesId(long id);
+    String getSyncTokenByUserId(long id);
 }

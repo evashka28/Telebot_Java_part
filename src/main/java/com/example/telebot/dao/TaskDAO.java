@@ -28,8 +28,10 @@ public class TaskDAO extends AbstractDAO<Task>{
 
     public List<Task> getAllByProjectId(long projectId, boolean favourite){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("select Project.tasks from Project p where p.id = :projectIdParam " +
-                "and favourite = :favouriteParam");
+        Query query = session.createQuery("select p.tasks from Project p " +
+                "inner join p.tasks t " +
+                "where p.id = :projectIdParam " +
+                "and t.favourite = :favouriteParam");
         query.setParameter("projectIdParam", projectId);
         query.setParameter("favouriteParam", favourite);
         List<Task> output = (List<Task>) query.getResultList();
@@ -45,7 +47,7 @@ public class TaskDAO extends AbstractDAO<Task>{
     public Task getWithOldestLastAccessByProjectId(long projectId){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
-        Query query = session.createQuery("select p.tasks from Project p " +
+        Query query = session.createQuery("select t from Project p " +
                 "inner join p.tasks t " +
                 "where p.id = :projectIdParam " +
                 "and t.favourite = :favouriteParam " +
@@ -56,6 +58,41 @@ public class TaskDAO extends AbstractDAO<Task>{
         query.setParameter("favouriteParam", false);
         query.setMaxResults(1);
         Task output = (Task) query.getSingleResult();
+
+        session.close();
+
+        return output;
+    }
+
+    public List<Long> getAllTodoistIdsByUserId(long userId){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+
+        Query query = session.createQuery("select t.todoistId from User u " +
+                "inner join u.projects p " +
+                "inner join p.tasks t " +
+                "where u.id = :userIdParam");
+        query.setParameter("userIdParam", userId);
+        List<Long> output = (List<Long>) query.getResultList();
+
+        session.close();
+
+        return output;
+    }
+
+    public List<Task> getAllByTagId(long tagId, long userId, boolean favourite){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+
+        Query query = session.createQuery("select t from User u " +
+                "inner join u.projects p " +
+                "inner join p.tasks t " +
+                "inner join t.tags tg " +
+                "where u.id = :userIdParam and " +
+                "tg.id = :tagIdParam and " +
+                "t.favourite = :favouriteParam");
+        query.setParameter("userIdParam", userId);
+        query.setParameter("tagIdParam", tagId);
+        query.setParameter("favouriteParam", favourite);
+        List<Task> output = (List<Task>) query.getResultList();
 
         session.close();
 

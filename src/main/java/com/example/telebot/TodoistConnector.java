@@ -144,8 +144,12 @@ public class TodoistConnector {
         String response = POSTRequest("https://api.todoist.com/sync/v8/sync?", params, token);
     }
 
-    public void partialSyncProjectsAndTasks(String token, String syncToken){
-
+    public String partialSyncProjectsAndTasks(String token, String syncToken) throws IOException {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("sync_token", syncToken);
+        params.put("resource_types", "[\"projects\",\"items\"]");
+        String response = POSTRequest("https://api.todoist.com/sync/v8/sync?", params, token);
+        return response;
     }
 
 

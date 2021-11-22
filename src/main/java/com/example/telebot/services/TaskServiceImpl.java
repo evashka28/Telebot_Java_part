@@ -64,6 +64,13 @@ public class TaskServiceImpl implements TaskService {
         return allFromProject(userId, projectService.getUserProject(userId).getId());
     }
 
+    @Override
+    public List<Task> allByTag(long userId, long tagId) throws IOException, ParseException {
+        List<Task> output = taskDAO.getAllByTagId(tagId, userId, false);
+        output = mergeTasks(output, userId);
+        return output;
+    }
+
     //возвращает все задачи из проекта, находящееся в БД
     public List<Task> allFromProject(long userId, long projectId) throws IOException, ParseException {
         List<Task> output = taskDAO.getAllByProjectId(projectId);
@@ -89,8 +96,9 @@ public class TaskServiceImpl implements TaskService {
     //обновление задачи в БД и todoist
     @Override
     public Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException {
+        task.setTags(tagService.getMultipleByIds(tagIds));
         taskDAO.update(task);
-        connector.updateTask(userService.getToken(userId),  task.getContent(), task.getDescription(), id);
+        connector.updateTask(userService.getToken(userId),  task.getContent(), task.getDescription(), task.getTodoistId());
         return task;
     }
 
@@ -148,5 +156,10 @@ public class TaskServiceImpl implements TaskService {
                 i.remove();
         }
         return tasks;
+    }
+
+    @Override
+    public List<Long> getAllTodoistIds(long userId) {
+        return taskDAO.getAllTodoistIdsByUserId(userId);
     }
 }

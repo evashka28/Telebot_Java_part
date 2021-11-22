@@ -46,4 +46,18 @@ public class ProjectDAO extends AbstractDAO<Project>{
         session.close();
         return output;
     }
+
+    public List<Long> getAllTodoistIdsByUserId(long userId){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+
+        Query query = session.createQuery("select p.todoistId from User u " +
+                "inner join u.projects p " +
+                "where u.id = :userIdParam");
+        query.setParameter("userIdParam", userId);
+        List<Long> output = (List<Long>) query.getResultList();
+
+        session.close();
+
+        return output;
+    }
 }

@@ -19,11 +19,13 @@ public interface ProjectService {
 
     Project select(long projectId, long userId) throws IOException, ParseException;
 
-    public void deselect(long projectId);
+    void deselect(long projectId);
 
     void delete(long projectId, long userId) throws IOException;
 
-    public Project getUserProject(long userId);
+    Project getUserProject(long userId);
 
-    public Project getUserFavouriteProject(long userId);
+    Project getUserFavouriteProject(long userId);
+
+    List<Long> getAllTodoistIds(long userId);
 }
