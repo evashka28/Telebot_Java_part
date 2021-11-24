@@ -28,4 +28,6 @@ public interface ProjectService {
     Project getUserFavouriteProject(long userId);
 
     List<Long> getAllTodoistIds(long userId);
+
+    Project getByTodoistId(long projectTodoistId, long userId);
 }

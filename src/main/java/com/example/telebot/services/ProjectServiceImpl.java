@@ -89,7 +89,6 @@ public class ProjectServiceImpl implements ProjectService{
     //удаление проекта и всех задач из БД
     @Override
     public void deselect(long projectId){
-        taskService.deleteTasksFromDBByProjectId(projectId);
         Project project = projectDAO.findById(projectId);
         projectDAO.delete(project);
     }
@@ -137,5 +136,10 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public List<Long> getAllTodoistIds(long userId) {
         return projectDAO.getAllTodoistIdsByUserId(userId);
+    }
+
+    @Override
+    public Project getByTodoistId(long projectTodoistId, long userId) {
+        return null;
     }
 }

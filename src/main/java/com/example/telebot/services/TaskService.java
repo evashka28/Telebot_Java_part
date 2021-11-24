@@ -19,6 +19,8 @@ public interface TaskService {
 
     Task get(long userId) throws IOException, ParseException;
 
+    Task getByTag(long userId, long tagId) throws IOException, ParseException;
+
     Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException;
 
     void delete(long id, long userId) throws IOException;
@@ -29,5 +31,11 @@ public interface TaskService {
 
     void deleteTasksFromDBByProjectId(long projectId);
 
+    void deleteTaskFromBD(long id);
+
     List<Long> getAllTodoistIds(long userId);
+
+    Task getByTodoistId(long taskTodoistId, long userId);
+
+    void syncCreate();
 }

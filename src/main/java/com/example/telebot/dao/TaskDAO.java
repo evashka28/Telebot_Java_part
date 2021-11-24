@@ -98,4 +98,53 @@ public class TaskDAO extends AbstractDAO<Task>{
 
         return output;
     }
+
+    public Task getWithOldestLastAccessByTagId(long tagId, long userId, boolean favourite) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+
+        Query query = session.createQuery("select t from User u " +
+                "inner join u.projects p " +
+                "inner join p.tasks t " +
+                "inner join t.tags tg " +
+                "where u.id = :userIdParam and " +
+                "tg.id = :tagIdParam and " +
+                "t.favourite = :favouriteParam " +
+                "and t.lastAccessDatetime = (select min(tt.lastAccessDatetime) from User uu " +
+                "inner join uu.projects pp " +
+                "inner join pp.tasks tt " +
+                "inner join tt.tags tgtg " +
+                "where uu.id = :userIdParam and " +
+                "tgtg.id = :tagIdParam and " +
+                "tt.favourite = :favouriteParam " +
+                ")");
+        query.setParameter("userIdParam", userId);
+        query.setParameter("tagIdParam", tagId);
+        query.setParameter("favouriteParam", favourite);
+        query.setMaxResults(1);
+
+        Task output = (Task) query.getSingleResult();
+
+        session.close();
+
+        return output;
+    }
+
+    public Task getByTodoistIdAndUserId(long userId, long todoistId) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+
+        Query query = session.createQuery("select t from User u " +
+                "inner join u.projects p " +
+                "inner join p.tasks t " +
+                "where u.id = :userIdParam and " +
+                "t.todoistId = :todoistIdParam");
+        query.setParameter("userIdParam", userId);
+        query.setParameter("todoistIdParam", todoistId);
+        query.setMaxResults(1);
+
+        Task output = (Task) query.getResultList();
+
+        session.close();
+
+        return output;
+    }
 }

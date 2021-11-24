@@ -42,8 +42,8 @@ public class ProjectController {
     }
 
     @PostMapping(value = "project/selected/{id}")
-    public void selectProject(@PathVariable long id, @RequestHeader long userId) throws IOException, ParseException {
-        service.select(id, userId);
+    public Project selectProject(@PathVariable long id, @RequestHeader long userId) throws IOException, ParseException {
+        return service.select(id, userId);
     }
     @DeleteMapping(value = "project/selected/{id}")
     public void deselectProject(@PathVariable long id){

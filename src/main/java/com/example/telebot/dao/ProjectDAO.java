@@ -1,6 +1,7 @@
 package com.example.telebot.dao;
 
 import com.example.telebot.Project;
+import com.example.telebot.Task;
 import com.example.telebot.utils.HibernateSessionFactoryUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -55,6 +56,24 @@ public class ProjectDAO extends AbstractDAO<Project>{
                 "where u.id = :userIdParam");
         query.setParameter("userIdParam", userId);
         List<Long> output = (List<Long>) query.getResultList();
+
+        session.close();
+
+        return output;
+    }
+
+    public Project getByTodoistIdAndUserId(long userId, long todoistId) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+
+        Query query = session.createQuery("select p from User u " +
+                "inner join u.projects p " +
+                "where u.id = :userIdParam and " +
+                "p.todoistId = :todoistIdParam");
+        query.setParameter("userIdParam", userId);
+        query.setParameter("todoistIdParam", todoistId);
+        query.setMaxResults(1);
+
+        Project output = (Project) query.getResultList();
 
         session.close();
 

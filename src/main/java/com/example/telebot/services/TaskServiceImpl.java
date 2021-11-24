@@ -93,6 +93,15 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
+    @Override
+    public Task getByTag(long userId, long tagId) throws IOException, ParseException {
+        Task task = taskDAO.getWithOldestLastAccessByTagId(tagId, userId, false);
+        task.setLastAccessDatetime(Timestamp.from(Instant.now()));
+        taskDAO.update(task);
+        task = mergeTask(task, userId);
+        return task;
+    }
+
     //обновление задачи в БД и todoist
     @Override
     public Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException {
@@ -119,6 +128,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     //вызывается в select в ProjectService добавляет задачи в БД из JSON
+    @Override
     public void addTasksToDB(String input, Project project) throws ParseException {
         List<Task> tasks = Converter.parseAllTasksJSON(input);
         for(Task task: tasks){
@@ -135,6 +145,11 @@ public class TaskServiceImpl implements TaskService {
         for(Task task: tasks){
             taskDAO.delete(task);
         }
+    }
+
+    @Override
+    public void deleteTaskFromBD(long id) {
+        taskDAO.delete(taskDAO.findById(id));
     }
 
     //получение задачи из БД и добавление информации из todoist
@@ -161,5 +176,15 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Long> getAllTodoistIds(long userId) {
         return taskDAO.getAllTodoistIdsByUserId(userId);
+    }
+
+    @Override
+    public Task getByTodoistId(long taskTodoistId, long userId) {
+        return null;
+    }
+
+    @Override
+    public void syncCreate() {
+
     }
 }

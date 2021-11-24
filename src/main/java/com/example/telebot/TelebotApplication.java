@@ -17,8 +17,6 @@ public class TelebotApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TelebotApplication.class, args);
-        //TodoistConnector connector = new TodoistConnector();
-        //connector.createProject("0193f9ca236affc47cc58ea0868e25bc494da9fe", "test");
     }
 
 

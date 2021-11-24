@@ -35,9 +35,14 @@ public class TaskController {
         return service.get(userId);
     }
 
-    @GetMapping(value = "/task/tag/{tagId}", produces = "application/json")
-    List<Task> getTaskByTagId(@PathVariable long tagId, @RequestHeader long userId) throws IOException, ParseException {
+    @GetMapping(value = "/tasks/tag/{tagId}", produces = "application/json")
+    List<Task> getAllTasksByTagId(@PathVariable long tagId, @RequestHeader long userId) throws IOException, ParseException {
         return service.allByTag(userId, tagId);
+    }
+
+    @GetMapping(value = "/task/tag/{tagId}", produces = "application/json")
+    Task getTaskByTagId(@PathVariable long tagId, @RequestHeader long userId) throws IOException, ParseException {
+        return service.getByTag(userId, tagId);
     }
 
     @PostMapping(value = "/task", consumes = "application/json", produces = "application/json")

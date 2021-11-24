@@ -2,6 +2,7 @@ package com.example.telebot.services;
 
 import com.example.telebot.TodoistConnector;
 import com.example.telebot.User;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -36,12 +37,66 @@ public class SyncServiceImpl implements SyncService{
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject) parser.parse(syncInfo);
 
-        List<Long> taskTodoistIds = taskService.getAllTodoistIds(userId);
-        List<Long> projectTodoistIds = projectService.getAllTodoistIds(userId);
+        if(object.containsKey("projects")){
+            List<Long> projectTodoistIds = projectService.getAllTodoistIds(userId);
+            syncProjects((JSONArray) object.get("projects"), projectTodoistIds, userId);
+        }
 
-        syncToken = (String) object.get("sync_token");
-        User user = userService.getUser(userId);
-        user.setSyncToken(syncToken);
-        userService.update(user, userId);
+        if(object.containsKey("items")) {
+            List<Long> projectTodoistIds = projectService.getAllTodoistIds(userId);
+            List<Long> taskTodoistIds = taskService.getAllTodoistIds(userId);
+            syncTasks((JSONArray) object.get("items"), taskTodoistIds, projectTodoistIds, userId);
+        }
+
+        if(object.containsKey("sync_token")) {
+            syncToken = (String) object.get("sync_token");
+            User user = userService.getUser(userId);
+            user.setSyncToken(syncToken);
+            userService.update(user, userId);
+        }
     }
+
+    private void syncProjects(JSONArray projectsSyncInfo, List<Long> projectTodoistIds, long userId) {
+        for(int i = 0; i < projectsSyncInfo.size(); i++) {
+            JSONObject projectObject = (JSONObject) projectsSyncInfo.get(i);
+            if (projectObject.containsKey("id")) {
+                Long todoistId = (Long) projectObject.get("id");
+                if (projectTodoistIds.contains(todoistId)
+                        && projectObject.containsKey("is_deleted")
+                        && (int)projectObject.get("is_deleted") == 1) {
+                    //delete project
+                }
+            }
+        }
+    }
+
+    private void syncTasks(JSONArray tasksSyncInfo, List<Long> taskTodoistIds, List<Long> projectTodoistIds, long userId) {
+        for(int i = 0; i < tasksSyncInfo.size(); i++) {
+            JSONObject taskObject = (JSONObject) tasksSyncInfo.get(i);
+            if (taskObject.containsKey("id")) {
+                Long todoistId = (Long) taskObject.get("id");
+                if (taskTodoistIds.contains(todoistId)
+                        && taskObject.containsKey("is_deleted")
+                        && (int)taskObject.get("is_deleted") == 1) {
+                    //delete task
+                    break;
+
+                }
+            }
+            if(taskObject.containsKey("project_id")) {
+                Long projectTodoistId = (Long) taskObject.get("project_id");
+                if (projectTodoistIds.contains(projectTodoistId)
+                        && taskObject.containsKey("is_deleted")
+                        && (int) taskObject.get("is_deleted") == 0) {
+                        //add task
+                }
+            }
+        }
+    }
+
+    private void deleteProject() {}
+
+    private void deleteTask() {}
+
+    private void createTask() {}
 }
