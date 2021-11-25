@@ -28,7 +28,7 @@ public class TaskDAO extends AbstractDAO<Task>{
 
     public List<Task> getAllByProjectId(long projectId, boolean favourite){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("select p.tasks from Project p " +
+        Query query = session.createQuery("select t from Project p " +
                 "inner join p.tasks t " +
                 "where p.id = :projectIdParam " +
                 "and t.favourite = :favouriteParam");
@@ -141,7 +141,7 @@ public class TaskDAO extends AbstractDAO<Task>{
         query.setParameter("todoistIdParam", todoistId);
         query.setMaxResults(1);
 
-        Task output = (Task) query.getResultList();
+        Task output = (Task) query.getSingleResult();
 
         session.close();
 

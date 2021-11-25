@@ -73,10 +73,11 @@ public class ProjectDAO extends AbstractDAO<Project>{
         query.setParameter("todoistIdParam", todoistId);
         query.setMaxResults(1);
 
-        Project output = (Project) query.getResultList();
+        Project output = (Project) query.getSingleResult();
 
         session.close();
 
         return output;
     }
+
 }

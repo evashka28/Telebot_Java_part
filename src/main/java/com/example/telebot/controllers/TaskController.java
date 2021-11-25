@@ -51,7 +51,7 @@ public class TaskController {
     }
 
     @PutMapping(value = "/task/{id}", consumes = "application/json", produces = "application/json")
-    Task updateTask(@PathVariable long id, @RequestBody Task updatedTask, @RequestParam(defaultValue = "") List<Long> tagsIds, @RequestHeader long userId) throws IOException {
+    Task updateTask(@PathVariable long id, @RequestBody Task updatedTask, @RequestParam(defaultValue = "") List<Long> tagsIds, @RequestHeader long userId) throws IOException, ParseException {
         return service.update(id, updatedTask, userId, tagsIds);
     }
 

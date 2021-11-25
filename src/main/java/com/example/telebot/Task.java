@@ -43,7 +43,7 @@ public class Task implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
     @JsonIgnore
-    private List<Tag> tags;
+    private Set<Tag> tags;
 
     public Task(long id, String description, String content, boolean favourite){
         this.id = id;
@@ -80,7 +80,7 @@ public class Task implements Serializable {
         return lastAccessDatetime;
     }
 
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
         return tags;
     }
 
@@ -112,7 +112,7 @@ public class Task implements Serializable {
         this.lastAccessDatetime = lastAccessDatetime;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
 
@@ -124,6 +124,11 @@ public class Task implements Serializable {
     public String toString()
     {
         return "{id:" + id + ", name:" + description + ", url:" + content + "}";
+    }
+
+    @PreRemove
+    private void removeTags() {
+        tags.clear();
     }
 }
 

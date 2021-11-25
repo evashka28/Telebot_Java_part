@@ -26,12 +26,15 @@ public class ProjectServiceImpl implements ProjectService{
 
     private final TaskService taskService;
 
+    private final SyncService syncService;
+
     @Autowired
-    public ProjectServiceImpl(TodoistConnector connector, ProjectDAO projectDAO, @Lazy UserService userService, @Lazy TaskService taskService) {
+    public ProjectServiceImpl(TodoistConnector connector, ProjectDAO projectDAO, @Lazy UserService userService, @Lazy TaskService taskService, @Lazy SyncService syncService) {
         this.connector = connector;
         this.projectDAO = projectDAO;
         this.userService = userService;
         this.taskService = taskService;
+        this.syncService = syncService;
     }
 
     //создаёт проект в todoist и добавляет его в БД
@@ -49,6 +52,7 @@ public class ProjectServiceImpl implements ProjectService{
     //обновляет проект в БД и todoist
     @Override
     public Project update(Project project, long userId) throws IOException, ParseException {
+        syncService.sync(userId);
         Project updatedProject = Converter.parseProjectJSON(
                 connector.updateProject(userService.getToken(userId), project.getName()));
         return projectDAO.update(updatedProject);
@@ -57,6 +61,7 @@ public class ProjectServiceImpl implements ProjectService{
     //возвращает проект, находящийся в БД
     @Override
     public Project get(long projectId, long userId) throws IOException, ParseException {
+        syncService.sync(userId);
         return Converter.parseProjectJSON(connector.getProject(userService.getToken(userId), projectId));
     }
 
@@ -69,6 +74,7 @@ public class ProjectServiceImpl implements ProjectService{
     //возвращает проекты пользователя из БД
     @Override
     public List<Project> allSelected(long userId) throws IOException, ParseException {
+        syncService.sync(userId);
         List<Project> output = projectDAO.getAllByUserId(userId);
         output = mergeProjects(output,userId);
         return output;
@@ -120,12 +126,14 @@ public class ProjectServiceImpl implements ProjectService{
         return projects;
     }
 
-    public Project getUserProject(long userId){
+    public Project getUserProject(long userId) throws IOException, ParseException {
+        syncService.sync(userId);
         Project output = projectDAO.getProjectByUserId(userId, false);
         return output;
     }
 
-    public Project getUserFavouriteProject(long userId){
+    public Project getUserFavouriteProject(long userId) throws IOException, ParseException {
+        syncService.sync(userId);
         Project output = projectDAO.getProjectByUserId(userId, true);
         if(output == null) {
             output = projectDAO.getProjectByUserId(userId, false);
@@ -140,6 +148,6 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public Project getByTodoistId(long projectTodoistId, long userId) {
-        return null;
+        return projectDAO.getByTodoistIdAndUserId(userId, projectTodoistId);
     }
 }

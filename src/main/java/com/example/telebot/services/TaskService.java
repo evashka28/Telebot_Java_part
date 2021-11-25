@@ -21,7 +21,7 @@ public interface TaskService {
 
     Task getByTag(long userId, long tagId) throws IOException, ParseException;
 
-    Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException;
+    Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException, ParseException;
 
     void delete(long id, long userId) throws IOException;
 
@@ -38,4 +38,6 @@ public interface TaskService {
     Task getByTodoistId(long taskTodoistId, long userId);
 
     void syncCreate();
+
+    void updateFavouriteState(Task task);
 }

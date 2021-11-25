@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -30,13 +31,16 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskDAO taskDAO;
 
+    private final SyncService syncService;
+
     @Autowired
-    public TaskServiceImpl(TodoistConnector connector, @Lazy UserService userService, @Lazy ProjectService projectService, @Lazy TagService tagService, TaskDAO taskDAO){
+    public TaskServiceImpl(TodoistConnector connector, @Lazy UserService userService, @Lazy ProjectService projectService, @Lazy TagService tagService, TaskDAO taskDAO, @Lazy SyncService syncService){
         this.connector = connector;
         this.userService = userService;
         this.projectService = projectService;
         this.tagService = tagService;
         this.taskDAO = taskDAO;
+        this.syncService = syncService;
     }
 
     //создаёт задачу и добавляет в БД
@@ -51,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
         task.setTodoistId(idAndSyncToken.getLeft());
         task.setCreationDatetime(Timestamp.from(Instant.now()));
         task.setLastAccessDatetime(Timestamp.from(Instant.now()));
-        task.setTags(tagService.getMultipleByIds(tagIds));
+        task.setTags(Set.copyOf(tagService.getMultipleByIds(tagIds)));
         return taskDAO.save(task);
 
 
@@ -60,12 +64,12 @@ public class TaskServiceImpl implements TaskService {
     //возвращает все задачи пользователя
     @Override
     public List<Task> all(long userId) throws IOException, ParseException {
-
         return allFromProject(userId, projectService.getUserProject(userId).getId());
     }
 
     @Override
     public List<Task> allByTag(long userId, long tagId) throws IOException, ParseException {
+        syncService.sync(userId);
         List<Task> output = taskDAO.getAllByTagId(tagId, userId, false);
         output = mergeTasks(output, userId);
         return output;
@@ -73,6 +77,7 @@ public class TaskServiceImpl implements TaskService {
 
     //возвращает все задачи из проекта, находящееся в БД
     public List<Task> allFromProject(long userId, long projectId) throws IOException, ParseException {
+        syncService.sync(userId);
         List<Task> output = taskDAO.getAllByProjectId(projectId);
         output = mergeTasks(output, userId);
         return output;
@@ -86,6 +91,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task get(long userId) throws IOException, ParseException {
+        syncService.sync(userId);
         Task task = taskDAO.getWithOldestLastAccessByProjectId(projectService.getUserProject(userId).getId());
         task.setLastAccessDatetime(Timestamp.from(Instant.now()));
         taskDAO.update(task);
@@ -95,6 +101,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getByTag(long userId, long tagId) throws IOException, ParseException {
+        syncService.sync(userId);
         Task task = taskDAO.getWithOldestLastAccessByTagId(tagId, userId, false);
         task.setLastAccessDatetime(Timestamp.from(Instant.now()));
         taskDAO.update(task);
@@ -104,8 +111,9 @@ public class TaskServiceImpl implements TaskService {
 
     //обновление задачи в БД и todoist
     @Override
-    public Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException {
-        task.setTags(tagService.getMultipleByIds(tagIds));
+    public Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException, ParseException {
+        syncService.sync(userId);
+        task.setTags(Set.copyOf(tagService.getMultipleByIds(tagIds)));
         taskDAO.update(task);
         connector.updateTask(userService.getToken(userId),  task.getContent(), task.getDescription(), task.getTodoistId());
         return task;
@@ -180,11 +188,16 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getByTodoistId(long taskTodoistId, long userId) {
-        return null;
+        return taskDAO.getByTodoistIdAndUserId(userId, taskTodoistId);
     }
 
     @Override
     public void syncCreate() {
+
+    }
+
+    @Override
+    public void updateFavouriteState(Task task) {
 
     }
 }

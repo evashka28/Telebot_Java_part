@@ -56,15 +56,16 @@ public class SyncServiceImpl implements SyncService{
         }
     }
 
-    private void syncProjects(JSONArray projectsSyncInfo, List<Long> projectTodoistIds, long userId) {
+    private void syncProjects(JSONArray projectsSyncInfo, List<Long> projectTodoistIds, long userId) throws IOException {
         for(int i = 0; i < projectsSyncInfo.size(); i++) {
             JSONObject projectObject = (JSONObject) projectsSyncInfo.get(i);
             if (projectObject.containsKey("id")) {
                 Long todoistId = (Long) projectObject.get("id");
                 if (projectTodoistIds.contains(todoistId)
                         && projectObject.containsKey("is_deleted")
-                        && (int)projectObject.get("is_deleted") == 1) {
+                        && (Long)projectObject.get("is_deleted") == 1) {
                     //delete project
+                    projectService.deselect(projectService.getByTodoistId(todoistId, userId).getId());
                 }
             }
         }
@@ -77,9 +78,12 @@ public class SyncServiceImpl implements SyncService{
                 Long todoistId = (Long) taskObject.get("id");
                 if (taskTodoistIds.contains(todoistId)
                         && taskObject.containsKey("is_deleted")
-                        && (int)taskObject.get("is_deleted") == 1) {
+                        && (Long)taskObject.get("is_deleted") == 1) {
                     //delete task
-                    break;
+                    System.out.println(todoistId);
+
+                    taskService.deleteTaskFromBD(taskService.getByTodoistId(todoistId, userId).getId());
+                    continue;
 
                 }
             }
@@ -87,7 +91,7 @@ public class SyncServiceImpl implements SyncService{
                 Long projectTodoistId = (Long) taskObject.get("project_id");
                 if (projectTodoistIds.contains(projectTodoistId)
                         && taskObject.containsKey("is_deleted")
-                        && (int) taskObject.get("is_deleted") == 0) {
+                        && (Long) taskObject.get("is_deleted") == 0) {
                         //add task
                 }
             }

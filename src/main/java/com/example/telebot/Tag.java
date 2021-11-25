@@ -19,7 +19,7 @@ public class Tag implements Serializable {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "tags")
-    private List<Task> tasks;
+    private Set<Task> tasks;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -50,11 +50,12 @@ public class Tag implements Serializable {
         this.user = user;
     }
 
-    public List<Task> getTasks() {
+    public Set<Task> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
     }
+
 }

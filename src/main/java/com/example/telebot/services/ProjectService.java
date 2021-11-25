@@ -23,9 +23,9 @@ public interface ProjectService {
 
     void delete(long projectId, long userId) throws IOException;
 
-    Project getUserProject(long userId);
+    Project getUserProject(long userId) throws IOException, ParseException;
 
-    Project getUserFavouriteProject(long userId);
+    Project getUserFavouriteProject(long userId) throws IOException, ParseException;
 
     List<Long> getAllTodoistIds(long userId);
 
