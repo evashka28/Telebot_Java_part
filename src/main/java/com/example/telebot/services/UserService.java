@@ -4,6 +4,7 @@ import com.example.telebot.User;
 import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
+import java.time.ZoneId;
 
 public interface UserService {
     User create(User user) throws IOException;
@@ -13,6 +14,8 @@ public interface UserService {
     User getUser(long userId);
 
     String getToken(long id);
+
+    String getZone(long id);
 
     void deleteUser(long id);
 

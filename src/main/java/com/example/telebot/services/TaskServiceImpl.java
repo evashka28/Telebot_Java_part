@@ -102,7 +102,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task getByTag(long userId, long tagId) throws IOException, ParseException {
         syncService.sync(userId);
-        Task task = taskDAO.getWithOldestLastAccessByTagId(tagId, userId, false);
+        Task task = taskDAO.getWithOldestLastAccessByTagId(tagId, userId, true);
         task.setLastAccessDatetime(Timestamp.from(Instant.now()));
         taskDAO.update(task);
         task = mergeTask(task, userId);

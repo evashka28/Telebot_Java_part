@@ -3,8 +3,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
+
 
 @Entity
 @Table (name = "users")
@@ -17,6 +20,9 @@ public class User implements Serializable {
 
     @Column(name = "token")
     private String token;
+
+    @Column(name = "zone")
+    private String zone;
 
     @JsonIgnore
     @Column(name = "sync_token")
@@ -32,11 +38,12 @@ public class User implements Serializable {
     private Set<Tag> tags;
 
 
-    public User(long id, String name, String token){
+    public User(long id, String name, String token, String zone){
         this.id = id;
         this.token = token;
         this.name = name;
         this.syncToken = "*";
+        this.zone=zone;
     }
 
     public User() {
@@ -45,9 +52,9 @@ public class User implements Serializable {
 
     public long getId() { return id; }
 
-    public String getToken() {
-        return token;
-    }
+    public String getToken() {return token;}
+
+    public String getZone() {return zone;}
 
     public String getName(){ return name; }
 
@@ -57,6 +64,10 @@ public class User implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public void setId(String zone) {
+        this.zone = zone;
     }
 
     public void setName(String name) {
