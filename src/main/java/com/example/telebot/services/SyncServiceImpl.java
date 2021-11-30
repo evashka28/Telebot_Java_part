@@ -71,14 +71,16 @@ public class SyncServiceImpl implements SyncService{
         }
     }
 
-    private void syncTasks(JSONArray tasksSyncInfo, List<Long> taskTodoistIds, List<Long> projectTodoistIds, long userId) {
+    private void syncTasks(JSONArray tasksSyncInfo, List<Long> taskTodoistIds, List<Long> projectTodoistIds, long userId) throws ParseException {
         for(int i = 0; i < tasksSyncInfo.size(); i++) {
             JSONObject taskObject = (JSONObject) tasksSyncInfo.get(i);
             if (taskObject.containsKey("id")) {
                 Long todoistId = (Long) taskObject.get("id");
                 if (taskTodoistIds.contains(todoistId)
-                        && taskObject.containsKey("is_deleted")
-                        && (Long)taskObject.get("is_deleted") == 1) {
+                        && ((taskObject.containsKey("is_deleted")
+                        && (Long) taskObject.get("is_deleted") == 1) ||
+                        (taskObject.containsKey("checked")
+                                && (Long) taskObject.get("checked") == 1))) {
                     //delete task
                     System.out.println(todoistId);
 
@@ -86,13 +88,13 @@ public class SyncServiceImpl implements SyncService{
                     continue;
 
                 }
-            }
-            if(taskObject.containsKey("project_id")) {
-                Long projectTodoistId = (Long) taskObject.get("project_id");
-                if (projectTodoistIds.contains(projectTodoistId)
-                        && taskObject.containsKey("is_deleted")
-                        && (Long) taskObject.get("is_deleted") == 0) {
+
+                if (!taskTodoistIds.contains(todoistId) && taskObject.containsKey("project_id")) {
+                    Long projectTodoistId = (Long) taskObject.get("project_id");
+                    if (projectTodoistIds.contains(projectTodoistId)) {
                         //add task
+                        taskService.addTaskToDB(taskObject, projectService.getByTodoistId(projectTodoistId, userId));
+                    }
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.example.telebot.services;
 
 import com.example.telebot.Project;
 import com.example.telebot.Task;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.annotation.Bean;
 
@@ -28,6 +29,9 @@ public interface TaskService {
     void complete(long id, long userId) throws IOException;
 
     void addTasksToDB(String input, Project project) throws ParseException;
+
+
+    void addTaskToDB(JSONObject input, Project project);
 
     void deleteTasksFromDBByProjectId(long projectId);
 

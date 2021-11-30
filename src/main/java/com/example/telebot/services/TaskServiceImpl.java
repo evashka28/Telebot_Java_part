@@ -6,6 +6,7 @@ import com.example.telebot.Task;
 import com.example.telebot.TodoistConnector;
 import com.example.telebot.dao.TaskDAO;
 import org.apache.commons.lang3.tuple.Pair;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -92,7 +93,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task get(long userId) throws IOException, ParseException {
         syncService.sync(userId);
-        Task task = taskDAO.getWithOldestLastAccessByProjectId(projectService.getUserProject(userId).getId());
+        Task task = taskDAO.getWithOldestLastAccess(userId);
         task.setLastAccessDatetime(Timestamp.from(Instant.now()));
         taskDAO.update(task);
         task = mergeTask(task, userId);
@@ -145,6 +146,15 @@ public class TaskServiceImpl implements TaskService {
             task.setLastAccessDatetime(Timestamp.from(Instant.now()));
             taskDAO.save(task);
         }
+    }
+
+    @Override
+    public void addTaskToDB(JSONObject input, Project project) {
+        Task task = Converter.taskFromJSONObject(input);
+        task.setProject(project);
+        task.setCreationDatetime(Timestamp.from(Instant.now()));
+        task.setLastAccessDatetime(Timestamp.from(Instant.now()));
+        taskDAO.save(task);
     }
 
     @Override
