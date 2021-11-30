@@ -56,6 +56,9 @@ public class TagScheduleController {
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put("userId",scheduleEmailRequest.getUserId());
         jobDataMap.put("tagId",scheduleEmailRequest.getTagId());
+        jobDataMap.put("daysOfWeek",scheduleEmailRequest.getDaysOfWeek());
+
+
 
         return JobBuilder.newJob(TagJob.class)
                 .withIdentity(UUID.randomUUID().toString(), "tag-jobs")
