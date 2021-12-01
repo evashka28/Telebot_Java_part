@@ -41,7 +41,7 @@ public class TaskDAO extends AbstractDAO<Task>{
     }
 
     public List<Task> getAllByProjectId(long projectId){
-        return getAllByProjectId(projectId, true);
+        return getAllByProjectId(projectId, false);
     }
 
     public Task getWithOldestLastAccess(long userId){
