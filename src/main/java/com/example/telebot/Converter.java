@@ -39,7 +39,7 @@ public class Converter {
         return null;
     }
 
-    public static List<Task> parseAllTasksJSON(String JSONString) throws ParseException {
+    public static List<Task> parseMultipleTasksJSON(String JSONString) throws ParseException {
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject) parser.parse(JSONString);
         if(object.containsKey("items")) {
@@ -53,7 +53,7 @@ public class Converter {
         return null;
     }
 
-    public static List<Project> parseAllProjectsJSON(String JSONString) throws ParseException {
+    public static List<Project> parseMultipleProjectsJSON(String JSONString) throws ParseException {
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject) parser.parse(JSONString);
         if(object.containsKey("projects")) {

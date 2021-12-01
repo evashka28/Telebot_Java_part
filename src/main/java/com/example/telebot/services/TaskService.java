@@ -14,9 +14,11 @@ public interface TaskService {
 
     List<Task> all(long userId) throws IOException, ParseException;
 
+    List<Task> allFavourite(long userId) throws IOException, ParseException;
+
     List<Task> allByTag(long userId, long tagId) throws IOException, ParseException;
 
-    Task get(long userId, long taskId) throws IOException, ParseException;
+    Task taskFromTodoist(long userId, long taskId) throws IOException, ParseException;
 
     Task get(long userId) throws IOException, ParseException;
 
@@ -33,8 +35,6 @@ public interface TaskService {
 
     void addTaskToDB(JSONObject input, Project project);
 
-    void deleteTasksFromDBByProjectId(long projectId);
-
     void deleteTaskFromBD(long id);
 
     List<Long> getAllTodoistIds(long userId);
@@ -43,5 +43,5 @@ public interface TaskService {
 
     void syncCreate();
 
-    void updateFavouriteState(Task task);
+    Task updateFavouriteState(long userID);
 }

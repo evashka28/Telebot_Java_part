@@ -1,6 +1,5 @@
 package com.example.telebot.controllers;
 
-import com.example.telebot.Tag;
 import com.example.telebot.Task;
 import com.example.telebot.services.TaskService;
 import org.json.simple.parser.ParseException;
@@ -25,9 +24,14 @@ public class TaskController {
         return service.all(userId);
     }
 
+    @GetMapping(value = "/tasks/favourite", produces = "application/json")
+    List<Task> allFavouriteTasks(@RequestHeader long userId) throws IOException, ParseException {
+        return service.allFavourite(userId);
+    }
+
     @GetMapping(value = "/task/{id}", produces = "application/json")
     Task getTaskById(@PathVariable long id, @RequestHeader long userId) throws IOException, ParseException {
-        return service.get(userId, id);
+        return service.taskFromTodoist(userId, id);
     }
 
     @GetMapping(value = "/task", produces = "application/json")
@@ -53,6 +57,11 @@ public class TaskController {
     @PutMapping(value = "/task/{id}", consumes = "application/json", produces = "application/json")
     Task updateTask(@PathVariable long id, @RequestBody Task updatedTask, @RequestParam(defaultValue = "") List<Long> tagsIds, @RequestHeader long userId) throws IOException, ParseException {
         return service.update(id, updatedTask, userId, tagsIds);
+    }
+
+    @PutMapping(value = "/task/favourite/{id}")
+    Task changeTasksFavourite(@PathVariable long id, @RequestHeader long userId) throws IOException {
+        return null;
     }
 
     @DeleteMapping(value = "/task/{id}")

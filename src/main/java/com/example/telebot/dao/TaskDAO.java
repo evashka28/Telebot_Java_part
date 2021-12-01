@@ -1,23 +1,11 @@
 package com.example.telebot.dao;
 
-import com.example.telebot.Project;
-import com.example.telebot.Tag;
 import com.example.telebot.Task;
 import com.example.telebot.utils.HibernateSessionFactoryUtil;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -26,13 +14,14 @@ public class TaskDAO extends AbstractDAO<Task>{
         setClazz(Task.class);
     }
 
-    public List<Task> getAllByProjectId(long projectId, boolean favourite){
+    public List<Task> getAll(long userId, boolean favourite){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("select t from Project p " +
+        Query query = session.createQuery("select t from User u " +
+                "inner join u.projects p " +
                 "inner join p.tasks t " +
-                "where p.id = :projectIdParam " +
+                "where u.id = :userIdParam " +
                 "and t.favourite = :favouriteParam");
-        query.setParameter("projectIdParam", projectId);
+        query.setParameter("userIdParam", userId);
         query.setParameter("favouriteParam", favourite);
         List<Task> output = (List<Task>) query.getResultList();
 
@@ -40,8 +29,12 @@ public class TaskDAO extends AbstractDAO<Task>{
         return output;
     }
 
-    public List<Task> getAllByProjectId(long projectId){
-        return getAllByProjectId(projectId, false);
+    public List<Task> getAll(long userId){
+        return getAll(userId, false);
+    }
+
+    public List<Task> getAllFavourites(long userId){
+        return getAll(userId, true);
     }
 
     public Task getWithOldestLastAccess(long userId){

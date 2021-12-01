@@ -62,12 +62,25 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
-    //возвращает все задачи пользователя
+    //возвращает все неизбранные задачи пользователя
     @Override
     public List<Task> all(long userId) throws IOException, ParseException {
-        return allFromProject(userId, projectService.getUserProject(userId).getId());
+        syncService.sync(userId);
+        List<Task> output = taskDAO.getAll(userId);
+        output = mergeTasks(output, userId);
+        return output;
     }
 
+    //возвращает все избранные задачи пользователя
+    @Override
+    public List<Task> allFavourite(long userId) throws IOException, ParseException {
+        syncService.sync(userId);
+        List<Task> output = taskDAO.getAllFavourites(userId);
+        output = mergeTasks(output, userId);
+        return output;
+    }
+
+    //возвращает все неизбранные задачи пользователя с выбранным тегом
     @Override
     public List<Task> allByTag(long userId, long tagId) throws IOException, ParseException {
         syncService.sync(userId);
@@ -76,20 +89,13 @@ public class TaskServiceImpl implements TaskService {
         return output;
     }
 
-    //возвращает все задачи из проекта, находящееся в БД
-    public List<Task> allFromProject(long userId, long projectId) throws IOException, ParseException {
-        syncService.sync(userId);
-        List<Task> output = taskDAO.getAllByProjectId(projectId);
-        output = mergeTasks(output, userId);
-        return output;
-    }
-
-    //возвращает задачу, которая есть в БД
+    //возвращает объект Task с информацией о задаче из todoist
     @Override
-    public Task get(long userId, long id) throws IOException, ParseException {
+    public Task taskFromTodoist(long userId, long id) throws IOException, ParseException {
         return Converter.parseTaskJSON(connector.getTask(userService.getToken(userId), taskDAO.findById(id).getTodoistId()));
     }
 
+    //возвращает задачу с минимальными датой и временем последнего обращения
     @Override
     public Task get(long userId) throws IOException, ParseException {
         syncService.sync(userId);
@@ -100,6 +106,7 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
+    //возвращает задачу с минимальными датой и временем последнего обращения по тегу
     @Override
     public Task getByTag(long userId, long tagId) throws IOException, ParseException {
         syncService.sync(userId);
@@ -110,7 +117,7 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
-    //обновление задачи в БД и todoist
+    //обновляет задачу в БД и todoist
     @Override
     public Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException, ParseException {
         syncService.sync(userId);
@@ -120,7 +127,7 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
-    //удаление задачи из БД и todoist
+    //удаляет задачу из БД и todoist
     @Override
     public void delete(long id, long userId) throws IOException {
         Task task = taskDAO.findById(id);
@@ -128,7 +135,7 @@ public class TaskServiceImpl implements TaskService {
         connector.deleteTask(userService.getToken(userId), task.getTodoistId());
     }
 
-    //завершение задачи и удаление из БД
+    //завершает задачу и удаляет из БД
     @Override
     public void complete(long id, long userId) throws IOException {
         Task task = taskDAO.findById(id);
@@ -139,7 +146,7 @@ public class TaskServiceImpl implements TaskService {
     //вызывается в select в ProjectService добавляет задачи в БД из JSON
     @Override
     public void addTasksToDB(String input, Project project) throws ParseException {
-        List<Task> tasks = Converter.parseAllTasksJSON(input);
+        List<Task> tasks = Converter.parseMultipleTasksJSON(input);
         for(Task task: tasks){
             task.setProject(project);
             task.setCreationDatetime(Timestamp.from(Instant.now()));
@@ -157,13 +164,6 @@ public class TaskServiceImpl implements TaskService {
         taskDAO.save(task);
     }
 
-    @Override
-    public void deleteTasksFromDBByProjectId(long projectId) {
-        List<Task> tasks = taskDAO.getAllByProjectId(projectId);
-        for(Task task: tasks){
-            taskDAO.delete(task);
-        }
-    }
 
     @Override
     public void deleteTaskFromBD(long id) {
@@ -172,7 +172,7 @@ public class TaskServiceImpl implements TaskService {
 
     //получение задачи из БД и добавление информации из todoist
     public Task mergeTask(Task task, long userId) throws IOException, ParseException {
-        Task compareTask = get(userId, task.getId());
+        Task compareTask = taskFromTodoist(userId, task.getId());
         if(compareTask == null)
             return null;
         task.setDescription(compareTask.getDescription());
@@ -191,11 +191,13 @@ public class TaskServiceImpl implements TaskService {
         return tasks;
     }
 
+    //Возвращает todoistIds всех задач пользователя
     @Override
     public List<Long> getAllTodoistIds(long userId) {
         return taskDAO.getAllTodoistIdsByUserId(userId);
     }
 
+    //Возвращает задачу по todoistId и id пользователя
     @Override
     public Task getByTodoistId(long taskTodoistId, long userId) {
         return taskDAO.getByTodoistIdAndUserId(userId, taskTodoistId);
@@ -206,8 +208,9 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
+    //добавляет задачу в избранное или удаляет оттуда
     @Override
-    public void updateFavouriteState(Task task) {
-
+    public Task updateFavouriteState(long userId) {
+        return null;
     }
 }

@@ -68,7 +68,7 @@ public class ProjectServiceImpl implements ProjectService{
     //возвращает все проекты пользователя из todoist
     @Override
     public List<Project> all(long userId) throws IOException, ParseException {
-        return Converter.parseAllProjectsJSON(connector.getUsersProjects(userService.getToken(userId), "*"));
+        return Converter.parseMultipleProjectsJSON(connector.getUsersProjects(userService.getToken(userId), "*"));
     }
 
     //возвращает проекты пользователя из БД
@@ -80,7 +80,7 @@ public class ProjectServiceImpl implements ProjectService{
         return output;
     }
 
-    //выбор проекта из проектов юзера в todoist и добавление его с задачами в бд
+    //выбирает проект из проектов юзера в todoist и добавление его с задачами в бд
     @Override
     public Project select(long projectTodoistId, long userId) throws IOException, ParseException {
         String input = connector.getProjectAndTasks(userService.getToken(userId), projectTodoistId);
@@ -92,21 +92,21 @@ public class ProjectServiceImpl implements ProjectService{
         return selectedProject;
     }
 
-    //удаление проекта и всех задач из БД
+    //удаляет проект и все задачи из БД
     @Override
     public void deselect(long projectId){
         Project project = projectDAO.findById(projectId);
         projectDAO.delete(project);
     }
 
-    //удаление проекта и всех задач из БД и todoist
+    //удаляет проект и всех задачи из БД и todoist
     @Override
     public void delete(long projectId, long userId) throws IOException {
         connector.deleteProject(userService.getToken(userId), projectDAO.findById(projectId).getTodoistId());
         deselect(projectId);
     }
 
-    //получение проекта из БД и добавление информации из todoist
+    //Возвращает проект из БД с добавлением информации из todoist
     public Project mergeProject(Project project, long userId) throws IOException, ParseException {
         Project compareProject = get(project.getTodoistId(), userId);
         if(compareProject == null)
@@ -126,12 +126,14 @@ public class ProjectServiceImpl implements ProjectService{
         return projects;
     }
 
+    //Возвращает неизбранные проект пользователя
     public Project getUserProject(long userId) throws IOException, ParseException {
         syncService.sync(userId);
         Project output = projectDAO.getProjectByUserId(userId, false);
         return output;
     }
 
+    //Возвращает избранный проект пользователя
     public Project getUserFavouriteProject(long userId) throws IOException, ParseException {
         syncService.sync(userId);
         Project output = projectDAO.getProjectByUserId(userId, true);
@@ -141,11 +143,13 @@ public class ProjectServiceImpl implements ProjectService{
         return output;
     }
 
+    //Возвращает todoistIds всех проектов пользователя
     @Override
     public List<Long> getAllTodoistIds(long userId) {
         return projectDAO.getAllTodoistIdsByUserId(userId);
     }
 
+    //Возвращает проект по todoistId и id пользователя
     @Override
     public Project getByTodoistId(long projectTodoistId, long userId) {
         return projectDAO.getByTodoistIdAndUserId(userId, projectTodoistId);
