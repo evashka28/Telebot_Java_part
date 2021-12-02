@@ -1,23 +1,11 @@
 package com.example.telebot.dao;
 
-import com.example.telebot.Project;
-import com.example.telebot.Tag;
 import com.example.telebot.Task;
 import com.example.telebot.utils.HibernateSessionFactoryUtil;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -26,13 +14,14 @@ public class TaskDAO extends AbstractDAO<Task>{
         setClazz(Task.class);
     }
 
-    public List<Task> getAllByProjectId(long projectId, boolean favourite){
+    public List<Task> getAll(long userId, boolean favourite){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("select t from Project p " +
+        Query query = session.createQuery("select t from User u " +
+                "inner join u.projects p " +
                 "inner join p.tasks t " +
-                "where p.id = :projectIdParam " +
+                "where u.id = :userIdParam " +
                 "and t.favourite = :favouriteParam");
-        query.setParameter("projectIdParam", projectId);
+        query.setParameter("userIdParam", userId);
         query.setParameter("favouriteParam", favourite);
         List<Task> output = (List<Task>) query.getResultList();
 
@@ -40,28 +29,33 @@ public class TaskDAO extends AbstractDAO<Task>{
         return output;
     }
 
-    public List<Task> getAllByProjectId(long projectId){
-        return getAllByProjectId(projectId, true);
+    public List<Task> getAll(long userId){
+        return getAll(userId, false);
     }
 
-    public Task getWithOldestLastAccessByProjectId(long projectId){
+    public List<Task> getAllFavourites(long userId){
+        return getAll(userId, true);
+    }
+
+    public Task getWithOldestLastAccess(long userId){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
-        Query query = session.createQuery("select t from Project p " +
+        Query query = session.createQuery("select t from User u " +
+                "inner join u.projects p " +
                 "inner join p.tasks t " +
-                "where p.id = :projectIdParam " +
+                "where u.id = :userIdParam " +
                 "and t.favourite = :favouriteParam " +
-                "and t.lastAccessDatetime = (select min(lastAccessDatetime) from t " +
-                "where p.id = :projectIdParam " +
-                "and t.favourite = :favouriteParam)");
-        query.setParameter("projectIdParam", projectId);
+                "order by t.lastAccessDatetime asc");
+        query.setParameter("userIdParam", userId);
         query.setParameter("favouriteParam", false);
         query.setMaxResults(1);
-        Task output = (Task) query.getSingleResult();
+        List<Task> output = (List<Task>) query.getResultList();
 
         session.close();
 
-        return output;
+        if(output.size() == 0)
+            return null;
+        return output.get(0);
     }
 
     public List<Long> getAllTodoistIdsByUserId(long userId){
@@ -109,24 +103,18 @@ public class TaskDAO extends AbstractDAO<Task>{
                 "where u.id = :userIdParam and " +
                 "tg.id = :tagIdParam and " +
                 "t.favourite = :favouriteParam " +
-                "and t.lastAccessDatetime = (select min(tt.lastAccessDatetime) from User uu " +
-                "inner join uu.projects pp " +
-                "inner join pp.tasks tt " +
-                "inner join tt.tags tgtg " +
-                "where uu.id = :userIdParam and " +
-                "tgtg.id = :tagIdParam and " +
-                "tt.favourite = :favouriteParam " +
-                ")");
+                "order by t.lastAccessDatetime asc");
         query.setParameter("userIdParam", userId);
         query.setParameter("tagIdParam", tagId);
         query.setParameter("favouriteParam", favourite);
         query.setMaxResults(1);
-
-        Task output = (Task) query.getSingleResult();
+        List<Task> output = (List<Task>) query.getResultList();
 
         session.close();
 
-        return output;
+        if(output.size() == 0)
+            return null;
+        return output.get(0);
     }
 
     public Task getByTodoistIdAndUserId(long userId, long todoistId) {
@@ -139,12 +127,14 @@ public class TaskDAO extends AbstractDAO<Task>{
                 "t.todoistId = :todoistIdParam");
         query.setParameter("userIdParam", userId);
         query.setParameter("todoistIdParam", todoistId);
-        query.setMaxResults(1);
 
-        Task output = (Task) query.getSingleResult();
+        query.setMaxResults(1);
+        List<Task> output = (List<Task>) query.getResultList();
 
         session.close();
 
-        return output;
+        if(output.size() == 0)
+            return null;
+        return output.get(0);
     }
 }

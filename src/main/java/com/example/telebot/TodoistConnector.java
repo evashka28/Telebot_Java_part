@@ -47,17 +47,17 @@ public class TodoistConnector {
     }
 
     //get-запрос получает проект по id
-    public String getProject(String token, long projectId) throws IOException {
+    public String getProject(String token, long projectTodoistId) throws IOException {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("project_id", projectId);
+        params.put("project_id", projectTodoistId);
         String response = POSTRequest("https://api.todoist.com/sync/v8/projects/get?", params, token);
         return response;
     }
 
     //get-запрос получает проект по id
-    public String getProjectAndTasks(String token, long projectId) throws IOException {
+    public String getProjectAndTasks(String token, long projectTodoistId) throws IOException {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("project_id", projectId);
+        params.put("project_id", projectTodoistId);
         String response = POSTRequest("https://api.todoist.com/sync/v8/projects/get_data?", params, token);
         return response;
     }
@@ -73,7 +73,7 @@ public class TodoistConnector {
         return response;
     }
 
-    //post-запрос создаёт новый проект
+    //post-запрос обновляет название проекта
     public String updateProject(String token, String projectName) throws IOException    {
         HashMap<String, Object> params = new HashMap<String, Object>();
         //params.put("sync_token", "gC00ZIYB51_eCo1_mmhTT4x9RexLm5jQG2GamTqL5Au_tcVhD5C4af8B5Ikq63rC3vpZZoEFzkJ2VaxXdowwiL8BbhefU02ftQQ5dO_KzL2J1Q");
@@ -85,9 +85,9 @@ public class TodoistConnector {
     }
 
     //get-запрос получает задание по id
-    public String getTask(String token, long taskId) throws IOException, ParseException {
+    public String getTask(String token, long taskTodoistId) throws IOException, ParseException {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("item_id", taskId);
+        params.put("item_id", taskTodoistId);
         params.put("all_data", false);
         String response = POSTRequest("https://api.todoist.com/sync/v8/items/get?", params, token);
         return response;

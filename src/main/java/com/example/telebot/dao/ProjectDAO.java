@@ -42,10 +42,13 @@ public class ProjectDAO extends AbstractDAO<Project>{
         query.setParameter("userIdParam", userId);
         query.setParameter("favouriteParam", favourite);
         query.setMaxResults(1);
-        Project output = (Project) query.getSingleResult();
+        List<Project> output = (List<Project>) query.getResultList();
 
         session.close();
-        return output;
+
+        if(output.size() == 0)
+            return null;
+        return output.get(0);
     }
 
     public List<Long> getAllTodoistIdsByUserId(long userId){

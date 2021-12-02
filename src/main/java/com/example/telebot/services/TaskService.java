@@ -2,6 +2,7 @@ package com.example.telebot.services;
 
 import com.example.telebot.Project;
 import com.example.telebot.Task;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.context.annotation.Bean;
 
@@ -13,9 +14,11 @@ public interface TaskService {
 
     List<Task> all(long userId) throws IOException, ParseException;
 
+    List<Task> allFavourite(long userId) throws IOException, ParseException;
+
     List<Task> allByTag(long userId, long tagId) throws IOException, ParseException;
 
-    Task get(long userId, long taskId) throws IOException, ParseException;
+    Task taskFromTodoist(long userId, long taskId) throws IOException, ParseException;
 
     Task get(long userId) throws IOException, ParseException;
 
@@ -29,7 +32,8 @@ public interface TaskService {
 
     void addTasksToDB(String input, Project project) throws ParseException;
 
-    void deleteTasksFromDBByProjectId(long projectId);
+
+    void addTaskToDB(JSONObject input, Project project);
 
     void deleteTaskFromBD(long id);
 
@@ -39,5 +43,5 @@ public interface TaskService {
 
     void syncCreate();
 
-    void updateFavouriteState(Task task);
+    Task updateFavouriteState(long userID);
 }
