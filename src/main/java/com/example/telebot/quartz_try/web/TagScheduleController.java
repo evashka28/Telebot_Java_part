@@ -5,6 +5,7 @@ import com.example.telebot.quartz_try.payload.TagRequest;
 import com.example.telebot.quartz_try.payload.TagResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
+import org.quartz.CronScheduleBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.telebot.services.UserService;
 
 import javax.validation.Valid;
+
+import java.nio.charset.StandardCharsets;
+import java.time.LocalTime;
+import java.time.*;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 @Slf4j
@@ -37,9 +43,16 @@ public class TagScheduleController {
     @PostMapping("/schedule/tag")
     public ResponseEntity<TagResponse> scheduleTag(@Valid @RequestBody TagRequest tagRequest) throws SchedulerException {
 
-        ZonedDateTime dateTime= ZonedDateTime.of(tagRequest.getDateTime(), ZoneId.of(userService.getZone(tagRequest.getUserId())));
+        String zone= userService.getZone(tagRequest.getUserId());
+        LocalTime time = tagRequest.getDateTime();
+        String cronstr="0 "+Integer.toString(time.getMinute())+" "+Integer.toString(time.getHour())+" ? * ";
+        String days1 = tagRequest.getDaysOfWeek().toString();
+        days1 = days1.substring(1, days1.length()-1);
+        String days = days1.replaceAll(" ", "");
+        String cronDay= cronstr + days;
+        System.out.println(cronDay);
         JobDetail jobDetail = buildJobDetail(tagRequest);
-        Trigger trigger = buildTrigger(jobDetail, dateTime);
+        Trigger trigger = buildTrigger(jobDetail, cronDay, zone);
         scheduler.scheduleJob(jobDetail, trigger);
 
         TagResponse tagResponse = new TagResponse(true, jobDetail.getKey().getName(),jobDetail.getKey().getGroup());
@@ -69,24 +82,25 @@ public class TagScheduleController {
 
     }
 
-    private Trigger buildTrigger(JobDetail jobDetail, ZonedDateTime startAt){
+    /*private Trigger buildTrigger(JobDetail jobDetail, ZonedDateTime startAt){
         return TriggerBuilder.newTrigger()
                 .forJob(jobDetail)
                 .withIdentity(jobDetail.getKey().getName(), "tag-trigger")
                 .withDescription("Send tag trigger")
                 .startAt(Date.from(startAt.toInstant()))
                 .withSchedule(SimpleScheduleBuilder.simpleSchedule().withMisfireHandlingInstructionFireNow())
-                .build();
+                .build();*/
 
-    /*private Trigger buildTrigger(JobDetail jobDetail, ZonedDateTime startAt){
+    private Trigger buildTrigger(JobDetail jobDetail, String cronDay, String zone){
             return TriggerBuilder.newTrigger()
+            //Trigger trigger = TriggerBuilder.newTrigger()
                     .forJob(jobDetail)
                     .withIdentity(jobDetail.getKey().getName(), "tag-trigger")
                     .withDescription("Send tag trigger")
-                    .withSchedule(cronSchedule("0 30 10-13 ? * WED,FRI")) //at 10:30, 11:30, 12:30, and 13:30, on every Wednesday and Friday.
-                    .inTimeZone(TimeZone.getTimeZone(userService.getZone(tagRequest.getUserId())))
-                    .forJob(myJobKey)
+                    .withSchedule(CronScheduleBuilder
+                            .cronSchedule(cronDay) //at 10:30, 11:30, 12:30, and 13:30, on every Wednesday and Friday.
+                            .inTimeZone(TimeZone.getTimeZone(zone)))
                     .build();
-        }*/
+        }
     }
-}
+

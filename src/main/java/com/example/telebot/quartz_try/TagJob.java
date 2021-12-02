@@ -7,6 +7,7 @@ import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import javax.persistence.NoResultException;
 import java.io.IOException;
 
 public class TagJob extends QuartzJobBean {
@@ -30,13 +31,15 @@ public class TagJob extends QuartzJobBean {
            // e.printStackTrace();
         } catch (ParseException e) {
             //e.printStackTrace();
+        }catch (NoResultException e) {
+            //e.printStackTrace();
         }
 
     }
-    private void sendTag( long UserId, long TagId) throws IOException, ParseException {
+    private void sendTag( long UserId, long TagId) throws IOException, ParseException, NoResultException {
         // TaskService taskService = new TaskService();
         long i=taskService.getByTag(UserId, TagId).getId();
-        System.out.printf("wow %d", i);
+        System.out.printf("wow %d",i);
 
     }
 }

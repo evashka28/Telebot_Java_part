@@ -10,6 +10,7 @@ import com.example.telebot.services.UserServiceImpl;
 
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
@@ -19,13 +20,13 @@ import java.util.List;
 
 @Getter
 @Setter
-public class TagRequest {
+public class   TagRequest {
 
     private long userId;
     private long tagId;
-    List<Byte> daysOfWeek;
+    List<Integer> daysOfWeek;
     @NonNull
-    private LocalDateTime dateTime;
+    private LocalTime dateTime;
 
 
 }
