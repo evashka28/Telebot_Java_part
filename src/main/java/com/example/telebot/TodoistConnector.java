@@ -2,6 +2,7 @@ package com.example.telebot;
 
 //import org.json.simple.JSONOblect;
 import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.util.*;
 
 //класс содержит методы с запросами к todoist
+@Component
 public class TodoistConnector {
 
     public String POSTRequest(String URLString, Map<String, Object> params, String token) throws IOException {

@@ -1,5 +1,7 @@
 package com.example.telebot;
 
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,16 +10,19 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+@Component
 public class BotConnector
 {
     public String sendTask(Task task, Long userId) throws IOException {
-        URL url = new URL("");
+        URL url = new URL("http://localhost:8080/task");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("userId", userId.toString());
         connection.setDoOutput(true);
 
         String jsonOutput = task.toString();
+        System.out.printf(jsonOutput);
 
         try(OutputStream os = connection.getOutputStream()) {
             byte[] input = jsonOutput.getBytes("utf-8");

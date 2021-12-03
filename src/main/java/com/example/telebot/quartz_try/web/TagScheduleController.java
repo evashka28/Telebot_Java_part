@@ -45,11 +45,11 @@ public class TagScheduleController {
 
         String zone= userService.getZone(tagRequest.getUserId());
         LocalTime time = tagRequest.getDateTime();
-        String cronstr="0 "+Integer.toString(time.getMinute())+" "+Integer.toString(time.getHour())+" ? * ";
+        String cronstr = "0 "+Integer.toString(time.getMinute())+" "+Integer.toString(time.getHour())+" ? * ";
         String days1 = tagRequest.getDaysOfWeek().toString();
         days1 = days1.substring(1, days1.length()-1);
         String days = days1.replaceAll(" ", "");
-        String cronDay= cronstr + days;
+        String cronDay = cronstr + days;
         System.out.println(cronDay);
         JobDetail jobDetail = buildJobDetail(tagRequest);
         Trigger trigger = buildTrigger(jobDetail, cronDay, zone);

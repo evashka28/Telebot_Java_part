@@ -123,7 +123,8 @@ public class Task implements Serializable {
     @Override
     public String toString()
     {
-        return "{id:" + id + ", name:" + description + ", url:" + content + "}";
+        return String.format("{\"id\":%d, \"todoistId\":%d, \"description\":\"%s\", \"content\":\"%s\", \"favourite\":%s}",
+                id, todoistId, description, content, favourite);
     }
 
     @PreRemove

@@ -19,11 +19,6 @@ public class TelebotApplication {
         SpringApplication.run(TelebotApplication.class, args);
     }
 
-
-    @Bean TodoistConnector todoistConnector(){
-        return new TodoistConnector();
-    }
-
     @Bean
     public Docket swaggerSettings() {
         return new Docket(DocumentationType.SWAGGER_2)

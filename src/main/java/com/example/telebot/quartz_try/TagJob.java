@@ -1,5 +1,7 @@
 package com.example.telebot.quartz_try;
 
+import com.example.telebot.BotConnector;
+import com.example.telebot.Task;
 import com.example.telebot.services.TaskService;
 import org.json.simple.parser.ParseException;
 import org.quartz.JobDataMap;
@@ -13,20 +15,22 @@ import java.io.IOException;
 public class TagJob extends QuartzJobBean {
 
     private final TaskService taskService;
+    private final BotConnector botConnector;
 
     @Autowired
-    public TagJob(TaskService taskService) {
+    public TagJob(TaskService taskService, BotConnector botConnector) {
         this.taskService = taskService;
+        this.botConnector = botConnector;
     }
 
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext){
         JobDataMap jobDataMap = jobExecutionContext.getMergedJobDataMap();
-        long UserId=jobDataMap.getLong("userId");
-        long TagId = jobDataMap.getLong("tagId");
+        long userId = jobDataMap.getLong("userId");
+        long tagId = jobDataMap.getLong("tagId");
         try {
-            sendTag(UserId, TagId);
+            sendTag(userId, tagId);
         } catch (IOException e) {
            // e.printStackTrace();
         } catch (ParseException e) {
@@ -38,8 +42,9 @@ public class TagJob extends QuartzJobBean {
     }
     private void sendTag( long UserId, long TagId) throws IOException, ParseException, NoResultException {
         // TaskService taskService = new TaskService();
-        long i=taskService.getByTag(UserId, TagId).getId();
-        System.out.printf("wow %d",i);
+        Task outputTask = taskService.getByTag(UserId, TagId);
+        botConnector.sendTask(outputTask, UserId);
+        //System.out.printf("wow %d",i);
 
     }
 }
