@@ -202,14 +202,14 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Tag addTagToTask(long userId, long id, long tagId){
+    public boolean addTagToTask(long userId, long id, long tagId){
         Task task = taskDAO.get(userId, id);
         Tag tag = tagService.get(tagId, userId);
         if (task == null || tag == null)
-            return null;
+            return false;
         task.addTag(tag);
         taskDAO.save(task);
-        return tag;
+        return true;
     }
 
     @Override

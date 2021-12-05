@@ -42,7 +42,7 @@ public interface TaskService {
 
     Task getByTodoistId(long taskTodoistId, long userId);
 
-    Tag addTagToTask(long userId, long id, long tagId);
+    boolean addTagToTask(long userId, long id, long tagId);
 
     void syncCreate();
 

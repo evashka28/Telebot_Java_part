@@ -76,7 +76,7 @@ public class TaskController {
     }
 
     @PutMapping(value = "/task/{id}/tag/{tagId}")
-    Tag addTagToTask(@PathVariable long id, @PathVariable long tagId, @RequestHeader long userId) {
+    boolean addTagToTask(@PathVariable long id, @PathVariable long tagId, @RequestHeader long userId) {
         return service.addTagToTask(userId, id, tagId);
     }
 }
