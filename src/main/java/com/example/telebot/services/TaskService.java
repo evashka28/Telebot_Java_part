@@ -1,6 +1,7 @@
 package com.example.telebot.services;
 
 import com.example.telebot.Project;
+import com.example.telebot.Tag;
 import com.example.telebot.Task;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -40,6 +41,8 @@ public interface TaskService {
     List<Long> getAllTodoistIds(long userId);
 
     Task getByTodoistId(long taskTodoistId, long userId);
+
+    Tag addTagToTask(long userId, long id, long tagId);
 
     void syncCreate();
 

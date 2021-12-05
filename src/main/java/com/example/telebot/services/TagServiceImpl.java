@@ -40,7 +40,7 @@ public class TagServiceImpl implements TagService{
 
     @Override
     public Tag get(long id, long userId) {
-        return tagDAO.findById(id);
+        return tagDAO.get(userId, id);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.telebot.controllers;
 
+import com.example.telebot.Tag;
 import com.example.telebot.Task;
 import com.example.telebot.services.TaskService;
 import org.json.simple.parser.ParseException;
@@ -72,5 +73,10 @@ public class TaskController {
     @PutMapping(value = "/task/{id}/complete")
     void completeTask(@PathVariable long id, @RequestHeader long userId) throws IOException {
         service.complete(id, userId);
+    }
+
+    @PutMapping(value = "/task/{id}/tag/{tagId}")
+    Tag addTagToTask(@PathVariable long id, @PathVariable long tagId, @RequestHeader long userId) {
+        return service.addTagToTask(userId, id, tagId);
     }
 }

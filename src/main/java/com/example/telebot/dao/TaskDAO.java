@@ -14,6 +14,26 @@ public class TaskDAO extends AbstractDAO<Task>{
         setClazz(Task.class);
     }
 
+    public Task get(long userId, long id){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+
+        Query query = session.createQuery("select t from User u " +
+                "inner join u.projects p " +
+                "inner join p.tasks t " +
+                "where u.id = :userIdParam and " +
+                "t.id = :idParam");
+        query.setParameter("userIdParam", userId);
+        query.setParameter("idParam", id);
+        query.setMaxResults(1);
+        List<Task> output = (List<Task>) query.getResultList();
+
+
+        if(output.size() == 0)
+            return null;
+        session.close();
+        return output.get(0);
+    }
+
     public List<Task> getAll(long userId, boolean favourite){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Query query = session.createQuery("select t from User u " +
@@ -110,10 +130,10 @@ public class TaskDAO extends AbstractDAO<Task>{
         query.setMaxResults(1);
         List<Task> output = (List<Task>) query.getResultList();
 
-        session.close();
 
         if(output.size() == 0)
             return null;
+        session.close();
         return output.get(0);
     }
 

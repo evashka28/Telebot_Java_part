@@ -36,7 +36,7 @@ public class Task implements Serializable {
     @JsonIgnore
     private Timestamp lastAccessDatetime;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "task_tag",
             joinColumns = {@JoinColumn(name = "task_id")},
@@ -118,6 +118,12 @@ public class Task implements Serializable {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public void addTag(Tag tag) {
+        if(tags == null)
+            tags = new HashSet<Tag>();
+        tags.add(tag);
     }
 
     @Override
