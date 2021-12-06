@@ -109,6 +109,8 @@ public class TaskServiceImpl implements TaskService {
     public Task getByTag(long userId, long tagId) throws IOException, ParseException {
         syncService.sync(userId);
         Task task = taskDAO.getWithOldestLastAccessByTagId(tagId, userId, false);
+        if (task == null)
+            return null;
         task.setLastAccessDatetime(Timestamp.from(Instant.now()));
         taskDAO.update(task);
         task = mergeTask(task, userId);
@@ -208,7 +210,7 @@ public class TaskServiceImpl implements TaskService {
         if (task == null || tag == null)
             return false;
         task.addTag(tag);
-        taskDAO.save(task);
+        taskDAO.update(task);
         return true;
     }
 
