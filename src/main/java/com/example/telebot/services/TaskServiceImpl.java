@@ -104,6 +104,16 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
+    @Override
+    public Task getById(long userId, long id) throws IOException, ParseException {
+        syncService.sync(userId);
+        Task task = taskDAO.findById(id);
+        task.setLastAccessDatetime(Timestamp.from(Instant.now()));
+        taskDAO.update(task);
+        task = mergeTask(task, userId);
+        return task;
+    }
+
     //возвращает задачу с минимальными датой и временем последнего обращения по тегу
     @Override
     public Task getByTag(long userId, long tagId) throws IOException, ParseException {

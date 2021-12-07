@@ -23,6 +23,8 @@ public interface TaskService {
 
     Task get(long userId) throws IOException, ParseException;
 
+    Task getById(long userId, long id) throws IOException, ParseException;
+
     Task getByTag(long userId, long tagId) throws IOException, ParseException;
 
     Task update(long id, Task task, long userId, List<Long> tagIds) throws IOException, ParseException;

@@ -32,7 +32,7 @@ public class TaskController {
 
     @GetMapping(value = "/task/{id}", produces = "application/json")
     Task getTaskById(@PathVariable long id, @RequestHeader long userId) throws IOException, ParseException {
-        return service.taskFromTodoist(userId, id);
+        return service.getById(userId, id);
     }
 
     @GetMapping(value = "/task", produces = "application/json")
