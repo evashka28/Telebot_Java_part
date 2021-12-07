@@ -46,9 +46,9 @@ public class TagScheduleController {
         String zone= userService.getZone(tagRequest.getUserId());
         LocalTime time = tagRequest.getDateTime();
         String cronstr = "0 "+Integer.toString(time.getMinute())+" "+Integer.toString(time.getHour())+" ? * ";
-        String days1 = tagRequest.getDaysOfWeek().toString();
-        days1 = days1.substring(1, days1.length()-1);
-        String days = days1.replaceAll(" ", "");
+        String days = tagRequest.getDaysOfWeek();
+        //days1 = days1.substring(1, days1.length()-1);
+        //String days = days1.replaceAll(" ", "");
         String cronDay = cronstr + days;
         System.out.println(cronDay);
         JobDetail jobDetail = buildJobDetail(tagRequest);
@@ -95,10 +95,11 @@ public class TagScheduleController {
             return TriggerBuilder.newTrigger()
             //Trigger trigger = TriggerBuilder.newTrigger()
                     .forJob(jobDetail)
+
                     .withIdentity(jobDetail.getKey().getName(), "tag-trigger")
                     .withDescription("Send tag trigger")
                     .withSchedule(CronScheduleBuilder
-                            .cronSchedule(cronDay) //at 10:30, 11:30, 12:30, and 13:30, on every Wednesday and Friday.
+                            .cronSchedule(cronDay)
                             .inTimeZone(TimeZone.getTimeZone(zone)))
                     .build();
         }

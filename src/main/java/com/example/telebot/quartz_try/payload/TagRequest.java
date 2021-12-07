@@ -17,7 +17,7 @@ public class   TagRequest {
 
     private long userId;
     private long tagId;
-    List<Integer> daysOfWeek;
+    String daysOfWeek;
     @NonNull
     private LocalTime dateTime;
 
