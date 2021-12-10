@@ -219,6 +219,10 @@ public class TaskServiceImpl implements TaskService {
         Tag tag = tagService.get(tagId, userId);
         if (task == null || tag == null)
             return false;
+        for(Tag currentTag :task.getTags()) {
+            if (currentTag.getId() == tagId)
+                return false;
+        }
         task.addTag(tag);
         taskDAO.update(task);
         return true;
