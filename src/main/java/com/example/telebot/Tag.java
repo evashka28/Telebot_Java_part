@@ -58,4 +58,11 @@ public class Tag implements Serializable {
         this.tasks = tasks;
     }
 
+    @PreRemove
+    private void removeTags() {
+        for(Task task: tasks) {
+            task.removeTag(this);
+        }
+    }
+
 }

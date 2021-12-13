@@ -126,6 +126,11 @@ public class Task implements Serializable {
         tags.add(tag);
     }
 
+    public void removeTag(Tag tag) {
+        if(tags.contains(tag))
+            tags.remove(tag);
+    }
+
     @Override
     public String toString()
     {
