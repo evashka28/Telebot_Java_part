@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import com.example.telebot.quartz_try.payload.TagRequest;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -29,7 +28,7 @@ public class Tag implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "tag", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<TagRequest> schedule;
+    private Set<TagRequest> tagRequests;
 
     public long getId() {
         return id;
@@ -63,6 +62,10 @@ public class Tag implements Serializable {
         this.tasks = tasks;
     }
 
+    public void addTagRequest(TagRequest tagRequest) {
+        tagRequests.add(tagRequest);
+    }
+
     @PreRemove
     private void removeTags() {
         for(Task task: tasks) {
@@ -70,12 +73,12 @@ public class Tag implements Serializable {
         }
     }
 
-    public Set<TagRequest> getSchedule() {
-        return schedule;
+    public Set<TagRequest> getTagRequests() {
+        return tagRequests;
     }
 
-    public void setTags(Set<TagRequest> schedule) {
-        this.schedule = schedule;
+    public void setTagRequests(Set<TagRequest> tagRequests) {
+        this.tagRequests = tagRequests;
     }
 
 }

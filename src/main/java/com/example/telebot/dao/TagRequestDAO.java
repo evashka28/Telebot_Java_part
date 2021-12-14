@@ -16,9 +16,9 @@ public class TagRequestDAO extends AbstractDAO<TagRequest>{
     public TagRequest get(long tagId, String id){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
-        Query query = session.createQuery("select sh from Tag u " +
-                "inner join u.schedule sh " +
-                "where u.id = :tagIdParam and " +
+        Query query = session.createQuery("select sh from Tag tg " +
+                "inner join tg.tagRequests sh " +
+                "where tg.id = :tagIdParam and " +
                 "sh.id = :idParam");
         query.setParameter("tagIdParam", tagId);
         query.setParameter("idParam", id);
@@ -34,7 +34,7 @@ public class TagRequestDAO extends AbstractDAO<TagRequest>{
 
     public List<TagRequest> getAllByTagId(long tagId){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("select u.schedule from Tag u where u.id = :tagIdParam");
+        Query query = session.createQuery("select tg.tagRequests from Tag tg where tg.id = :tagIdParam");
         query.setParameter("tagIdParam", tagId);
         List<TagRequest> output = (List<TagRequest>) query.getResultList();
 

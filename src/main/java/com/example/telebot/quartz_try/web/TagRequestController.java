@@ -29,7 +29,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-public class TagScheduleController {
+public class TagRequestController {
 
 
     private final Scheduler scheduler;
@@ -41,7 +41,7 @@ public class TagScheduleController {
     private final TagService tagService;
 
     @Autowired
-    public TagScheduleController(Scheduler scheduler, UserService userService, TagRequestService tagRequestService, TagService tagService) {
+    public TagRequestController(Scheduler scheduler, UserService userService, TagRequestService tagRequestService, TagService tagService) {
         this.scheduler = scheduler;
         this.userService = userService;
         this.tagRequestService = tagRequestService;
@@ -60,10 +60,6 @@ public class TagScheduleController {
         JobDetail jobDetail = buildJobDetail(tagRequest, tagId, userId);
         Trigger trigger = buildTrigger(jobDetail, cronDay, zone);
         scheduler.scheduleJob(jobDetail, trigger);
-        tagRequest.setTag(tagService.get(tagId, userId));//енто надо удалить
-        System.out.println(tagRequest.getTag().getId());
-        //TagResponse tagResponse = new TagResponse(true, jobDetail.getKey().getName(), jobDetail.getKey().getGroup());
-        //return ResponseEntity.ok(tagResponse);
         return tagRequestService.create(tagRequest, tagId, userId);
 
     }

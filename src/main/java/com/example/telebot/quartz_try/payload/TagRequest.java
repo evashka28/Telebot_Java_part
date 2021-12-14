@@ -11,12 +11,10 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalTime;
-import java.util.List;
 
-@Getter
-@Setter
+
 @Entity
-@Table(name = "schedule")
+@Table(name = "tag_requests")
 public class TagRequest implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid")
@@ -30,12 +28,45 @@ public class TagRequest implements Serializable {
     private Tag tag;
 
 
-    @Column(name = "daysOfWeek")
+    @Column(name = "daysofweek")
     String daysOfWeek;
 
     @NonNull
-    @Column(name = "dateTime")
+    @Column(name = "datetime")
     private LocalTime dateTime;
 
 
+    public TagRequest() {}
+
+    public String getId() {
+        return id;
+    }
+
+    public Tag getTag() {
+        return tag;
+    }
+
+    public LocalTime getDateTime() {
+        return dateTime;
+    }
+
+    public String getDaysOfWeek() {
+        return daysOfWeek;
+    }
+
+    public void setDaysOfWeek(String daysOfWeek) {
+        this.daysOfWeek = daysOfWeek;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setDateTime(LocalTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
 }

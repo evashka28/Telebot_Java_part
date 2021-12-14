@@ -23,7 +23,8 @@ public class TagRequestServiceImpl implements TagRequestService{
 
     @Override
     public TagRequest create(TagRequest tagRequest, long tagId, long userId) {
-        tagRequest.setTag(tagService.get(userId, tagId));
+        Tag tag = tagService.get(tagId, userId);
+        tagRequest.setTag(tag);
         return tagRequestDAO.save(tagRequest);
     }
 
