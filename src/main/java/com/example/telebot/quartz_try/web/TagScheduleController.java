@@ -1,18 +1,19 @@
 package com.example.telebot.quartz_try.web;
 
+import com.example.telebot.Tag;
 import com.example.telebot.quartz_try.TagJob;
 import com.example.telebot.quartz_try.payload.TagRequest;
 import com.example.telebot.quartz_try.payload.TagResponse;
+import com.example.telebot.services.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.CronScheduleBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.example.telebot.services.UserService;
+import com.example.telebot.services.TagRequestService;
+import com.example.telebot.services.TagService;
 
 import javax.validation.Valid;
 
@@ -22,6 +23,7 @@ import java.time.*;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -34,47 +36,61 @@ public class TagScheduleController {
 
     private final UserService userService;
 
+    private final TagRequestService tagRequestService;
+
+    private final TagService tagService;
+
     @Autowired
-    public TagScheduleController(Scheduler scheduler, UserService userService) {
+    public TagScheduleController(Scheduler scheduler, UserService userService, TagRequestService tagRequestService, TagService tagService) {
         this.scheduler = scheduler;
         this.userService = userService;
+        this.tagRequestService = tagRequestService;
+        this.tagService = tagService;
     }
 
     @PostMapping("/schedule/tag")
-    public ResponseEntity<TagResponse> scheduleTag(@Valid @RequestBody TagRequest tagRequest) throws SchedulerException {
+    public TagRequest scheduleTag(@Valid @RequestBody TagRequest tagRequest,  @RequestParam long tagId, @RequestHeader long userId) throws SchedulerException {
 
-        String zone= userService.getZone(tagRequest.getUserId());
+        String zone = userService.getZone(userId);
         LocalTime time = tagRequest.getDateTime();
-        String cronstr = "0 "+Integer.toString(time.getMinute())+" "+Integer.toString(time.getHour())+" ? * ";
+        String cronstr = "0 " + Integer.toString(time.getMinute()) + " " + Integer.toString(time.getHour()) + " ? * ";
         String days = tagRequest.getDaysOfWeek();
-        //days1 = days1.substring(1, days1.length()-1);
-        //String days = days1.replaceAll(" ", "");
         String cronDay = cronstr + days;
         System.out.println(cronDay);
-        JobDetail jobDetail = buildJobDetail(tagRequest);
+        JobDetail jobDetail = buildJobDetail(tagRequest, tagId, userId);
         Trigger trigger = buildTrigger(jobDetail, cronDay, zone);
         scheduler.scheduleJob(jobDetail, trigger);
-
-        TagResponse tagResponse = new TagResponse(true, jobDetail.getKey().getName(),jobDetail.getKey().getGroup());
-        return ResponseEntity.ok(tagResponse);
+        tagRequest.setTag(tagService.get(tagId, userId));//енто надо удалить
+        System.out.println(tagRequest.getTag().getId());
+        //TagResponse tagResponse = new TagResponse(true, jobDetail.getKey().getName(), jobDetail.getKey().getGroup());
+        //return ResponseEntity.ok(tagResponse);
+        return tagRequestService.create(tagRequest, tagId, userId);
 
     }
 
+    @DeleteMapping(value = "/schedule/{id}")
+    void delete(@PathVariable String id, @RequestHeader long tagId) throws SchedulerException {
+
+        scheduler.deleteJob(JobKey.jobKey(id, "tag-jobs"));
+        tagRequestService.delete(id, tagId);
+
+    }
+
+
     @GetMapping("/get")
-    public ResponseEntity<String> getApiTest(){
+    public ResponseEntity<String> getApiTest() {
         return ResponseEntity.ok("Api- pass");
     }
 
-    private JobDetail buildJobDetail(TagRequest scheduleEmailRequest){
+    private JobDetail buildJobDetail(TagRequest scheduleEmailRequest, long tagId, long userId) {
         JobDataMap jobDataMap = new JobDataMap();
-        jobDataMap.put("userId",scheduleEmailRequest.getUserId());
-        jobDataMap.put("tagId",scheduleEmailRequest.getTagId());
-        jobDataMap.put("daysOfWeek",scheduleEmailRequest.getDaysOfWeek());
-
+        jobDataMap.put("userId", userId);
+        jobDataMap.put("tagId", tagId);
+        jobDataMap.put("daysOfWeek", scheduleEmailRequest.getDaysOfWeek());
 
 
         return JobBuilder.newJob(TagJob.class)
-                .withIdentity(UUID.randomUUID().toString(), "tag-jobs")
+                .withIdentity(scheduleEmailRequest.getId(), "tag-jobs")
                 .withDescription("Send tag")
                 .usingJobData(jobDataMap)
                 .storeDurably()
@@ -82,26 +98,33 @@ public class TagScheduleController {
 
     }
 
-    /*private Trigger buildTrigger(JobDetail jobDetail, ZonedDateTime startAt){
+
+    private Trigger buildTrigger(JobDetail jobDetail, String cronDay, String zone) {
         return TriggerBuilder.newTrigger()
                 .forJob(jobDetail)
+
                 .withIdentity(jobDetail.getKey().getName(), "tag-trigger")
                 .withDescription("Send tag trigger")
-                .startAt(Date.from(startAt.toInstant()))
-                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withMisfireHandlingInstructionFireNow())
-                .build();*/
-
-    private Trigger buildTrigger(JobDetail jobDetail, String cronDay, String zone){
-            return TriggerBuilder.newTrigger()
-            //Trigger trigger = TriggerBuilder.newTrigger()
-                    .forJob(jobDetail)
-
-                    .withIdentity(jobDetail.getKey().getName(), "tag-trigger")
-                    .withDescription("Send tag trigger")
-                    .withSchedule(CronScheduleBuilder
-                            .cronSchedule(cronDay)
-                            .inTimeZone(TimeZone.getTimeZone(zone)))
-                    .build();
-        }
+                .withSchedule(CronScheduleBuilder
+                        .cronSchedule(cronDay)
+                        .inTimeZone(TimeZone.getTimeZone(zone)))
+                .build();
     }
 
+
+    @GetMapping(value = "/schedules", produces = "application/json")
+    List<TagRequest> all(@RequestHeader long tagId) {
+        return tagRequestService.all(tagId);
+    }
+
+    @GetMapping(value = "/schedule/{id}", produces = "application/json")
+    TagRequest get(@PathVariable String id, @RequestHeader long tagId) {
+        return tagRequestService.get(id, tagId);
+    }
+
+    @PutMapping(value = "/schedule/{id}", produces = "application/json", consumes = "application/json")
+    TagRequest update(@RequestBody TagRequest newTag, @RequestHeader long tagId, long userId) {
+        return tagRequestService.update(newTag, tagId, userId);
+    }
+
+}
