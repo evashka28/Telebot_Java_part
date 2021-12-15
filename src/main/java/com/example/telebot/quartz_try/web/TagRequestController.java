@@ -49,9 +49,10 @@ public class TagRequestController {
     }
 
     @PostMapping("/schedule/tag")
-    public TagRequest scheduleTag(@Valid @RequestBody TagRequest tagRequest,  @RequestParam long tagId, @RequestHeader long userId) throws SchedulerException {
+    public TagRequest scheduleTag(@Valid @RequestBody TagRequest tagRequest,   @RequestHeader long tagId, @RequestHeader long userId) throws SchedulerException {
 
         String zone = userService.getZone(userId);
+        tagRequest=tagRequestService.create(tagRequest, tagId, userId);
         LocalTime time = tagRequest.getDateTime();
         String cronstr = "0 " + Integer.toString(time.getMinute()) + " " + Integer.toString(time.getHour()) + " ? * ";
         String days = tagRequest.getDaysOfWeek();
@@ -60,7 +61,8 @@ public class TagRequestController {
         JobDetail jobDetail = buildJobDetail(tagRequest, tagId, userId);
         Trigger trigger = buildTrigger(jobDetail, cronDay, zone);
         scheduler.scheduleJob(jobDetail, trigger);
-        return tagRequestService.create(tagRequest, tagId, userId);
+
+        return tagRequest;
 
     }
 
@@ -107,7 +109,6 @@ public class TagRequestController {
                 .build();
     }
 
-
     @GetMapping(value = "/schedules", produces = "application/json")
     List<TagRequest> all(@RequestHeader long tagId) {
         return tagRequestService.all(tagId);
@@ -122,5 +123,4 @@ public class TagRequestController {
     TagRequest update(@RequestBody TagRequest newTag, @RequestHeader long tagId, long userId) {
         return tagRequestService.update(newTag, tagId, userId);
     }
-
 }
