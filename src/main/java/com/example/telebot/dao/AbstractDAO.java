@@ -41,7 +41,6 @@ public abstract class AbstractDAO<T extends Serializable>{
     }
 
     public void delete(T entity) {
-        System.out.println("aaa");
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         session.delete(entity);
