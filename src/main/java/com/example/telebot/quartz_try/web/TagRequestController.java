@@ -54,7 +54,7 @@ public class TagRequestController {
         String zone = userService.getZone(userId);
         tagRequest=tagRequestService.create(tagRequest, tagId, userId);
         LocalTime time = tagRequest.getDateTime();
-        String cronstr = "0 " + Integer.toString(time.getMinute()) + " " + Integer.toString(time.getHour()) + " ? * ";
+        String cronstr = "0 " + time.getMinute() + " " + time.getHour() + " ? * ";
         String days = tagRequest.getDaysOfWeek();
         String cronDay = cronstr + days;
         System.out.println(cronDay);
@@ -67,10 +67,10 @@ public class TagRequestController {
     }
 
     @DeleteMapping(value = "/schedule/{id}")
-    void delete(@PathVariable String id, @RequestHeader long tagId) throws SchedulerException {
+    void delete(@PathVariable String id) throws SchedulerException {
 
         scheduler.deleteJob(JobKey.jobKey(id, "tag-jobs"));
-        tagRequestService.delete(id, tagId);
+        tagRequestService.delete(id);
 
     }
 
@@ -110,13 +110,13 @@ public class TagRequestController {
     }
 
     @GetMapping(value = "/schedules", produces = "application/json")
-    List<TagRequest> all(@RequestHeader long tagId) {
-        return tagRequestService.all(tagId);
+    List<TagRequest> all(@RequestHeader long userId) {
+        return tagRequestService.all(userId);
     }
 
     @GetMapping(value = "/schedule/{id}", produces = "application/json")
     TagRequest get(@PathVariable String id, @RequestHeader long tagId) {
-        return tagRequestService.get(id, tagId);
+        return tagRequestService.get(id);
     }
 
     @PutMapping(value = "/schedule/{id}", produces = "application/json", consumes = "application/json")

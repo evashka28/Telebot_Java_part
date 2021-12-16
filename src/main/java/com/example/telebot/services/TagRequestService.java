@@ -11,9 +11,9 @@ public interface TagRequestService {
 
     TagRequest update(TagRequest schedule, long tagId, long userId);
 
-    void delete(String shId, long tagId);
+    void delete(String shId);
 
-    TagRequest get(String id, long tagId);
+    TagRequest get(String id);
 
     List<TagRequest> all(long tagId);
 

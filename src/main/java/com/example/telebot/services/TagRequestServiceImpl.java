@@ -35,19 +35,19 @@ public class TagRequestServiceImpl implements TagRequestService{
     }
 
     @Override
-    public void delete(String Id, long tagId) {
-        TagRequest tagRequest = tagRequestDAO.get(tagId, Id);
+    public void delete(String id) {
+        TagRequest tagRequest = tagRequestDAO.get(id);
         tagRequestDAO.delete(tagRequest);
     }
 
     @Override
-    public TagRequest get(String id, long tagId) {
-        return tagRequestDAO.get(tagId, id);
+    public TagRequest get(String id) {
+        return tagRequestDAO.get(id);
     }
 
     @Override
-    public List<TagRequest> all(long tagId) {
-        return tagRequestDAO.getAllByTagId(tagId);
+    public List<TagRequest> all(long userId) {
+        return tagRequestDAO.getAllByUserId(userId);
     }
 
 }
