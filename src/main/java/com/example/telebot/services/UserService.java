@@ -22,4 +22,6 @@ public interface UserService {
     User getById(long id);
 
     String getSyncTokenByUserId(long id);
+
+    User updateTimezone(long id, String timezone);
 }

@@ -69,5 +69,12 @@ public class UserServiceImpl implements UserService {
         return userDAO.findById(id).getSyncToken();
     }
 
+    @Override
+    public User updateTimezone(long id, String timezone) {
+        User user = userDAO.findById(id);
+        user.setZone(timezone);
+        return userDAO.update(user);
+    }
+
 
 }
