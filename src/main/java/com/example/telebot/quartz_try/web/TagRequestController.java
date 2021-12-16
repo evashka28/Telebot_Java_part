@@ -49,7 +49,7 @@ public class TagRequestController {
     }
 
     @PostMapping("/schedule/tag")
-    public TagRequest scheduleTag(@Valid @RequestBody TagRequest tagRequest,   @RequestHeader long tagId, @RequestHeader long userId) throws SchedulerException {
+    public TagRequest scheduleTag(@Valid @RequestBody TagRequest tagRequest,  @RequestHeader long tagId, @RequestHeader long userId) throws SchedulerException {
 
         String zone = userService.getZone(userId);
         tagRequest=tagRequestService.create(tagRequest, tagId, userId);
