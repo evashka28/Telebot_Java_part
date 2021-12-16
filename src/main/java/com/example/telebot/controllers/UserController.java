@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalTime;
 
 @RestController
 public class UserController {
@@ -30,6 +31,11 @@ public class UserController {
     @PutMapping(value = "/user/{id}", consumes = "application/json", produces = "application/json")
     public User updateUser(@RequestBody User updatedUser, @PathVariable long id){
         return service.update(updatedUser, id);
+    }
+
+    @PutMapping(value = "/user/{id}/timezone", consumes = "application/json", produces = "application/json")
+    public User updateTimezone(@RequestBody String timezone, @PathVariable long id){
+        return service.updateTimezone(id, timezone);
     }
 
     @DeleteMapping(value = "/user/{id}")
