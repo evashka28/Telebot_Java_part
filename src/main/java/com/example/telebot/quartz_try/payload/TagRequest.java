@@ -1,6 +1,7 @@
 package com.example.telebot.quartz_try.payload;
 
 import com.example.telebot.Tag;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NonNull;
@@ -22,7 +23,6 @@ public class TagRequest implements Serializable {
     private String id;
 
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tag_id")
     private Tag tag;
