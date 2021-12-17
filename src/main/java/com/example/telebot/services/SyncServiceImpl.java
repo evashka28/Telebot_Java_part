@@ -56,7 +56,7 @@ public class SyncServiceImpl implements SyncService{
         }
     }
 
-    private void syncProjects(JSONArray projectsSyncInfo, List<Long> projectTodoistIds, long userId) throws IOException {
+    private void syncProjects(JSONArray projectsSyncInfo, List<Long> projectTodoistIds, long userId) {
         for(int i = 0; i < projectsSyncInfo.size(); i++) {
             JSONObject projectObject = (JSONObject) projectsSyncInfo.get(i);
             if (projectObject.containsKey("id")) {
@@ -71,20 +71,21 @@ public class SyncServiceImpl implements SyncService{
         }
     }
 
-    private void syncTasks(JSONArray tasksSyncInfo, List<Long> taskTodoistIds, List<Long> projectTodoistIds, long userId) throws ParseException {
+    private void syncTasks(JSONArray tasksSyncInfo, List<Long> taskTodoistIds, List<Long> projectTodoistIds, long userId) {
         for(int i = 0; i < tasksSyncInfo.size(); i++) {
             JSONObject taskObject = (JSONObject) tasksSyncInfo.get(i);
             if (taskObject.containsKey("id")) {
                 Long todoistId = (Long) taskObject.get("id");
-                if (taskTodoistIds.contains(todoistId)
-                        && ((taskObject.containsKey("is_deleted")
+                if ((taskObject.containsKey("is_deleted")
                         && (Long) taskObject.get("is_deleted") == 1) ||
                         (taskObject.containsKey("checked")
-                                && (Long) taskObject.get("checked") == 1))) {
-                    //delete task
-                    System.out.println(todoistId);
+                                && (Long) taskObject.get("checked") == 1)) {
+                    if(taskTodoistIds.contains(todoistId)) {
+                        //delete task
+                        System.out.println("syncDelete");
 
-                    taskService.deleteTaskFromBD(taskService.getByTodoistId(todoistId, userId).getId());
+                        taskService.deleteTaskFromBD(taskService.getByTodoistId(todoistId, userId).getId());
+                    }
                     continue;
 
                 }
@@ -92,7 +93,7 @@ public class SyncServiceImpl implements SyncService{
                 if (!taskTodoistIds.contains(todoistId) && taskObject.containsKey("project_id")) {
                     Long projectTodoistId = (Long) taskObject.get("project_id");
                     if (projectTodoistIds.contains(projectTodoistId)) {
-                        //add task
+                        System.out.println("syncAdd");
                         taskService.addTaskToDB(taskObject, projectService.getByTodoistId(projectTodoistId, userId));
                     }
                 }
