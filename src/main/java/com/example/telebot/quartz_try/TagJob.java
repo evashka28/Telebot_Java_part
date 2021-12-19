@@ -5,6 +5,7 @@ import com.example.telebot.Task;
 import com.example.telebot.services.TaskService;
 import com.example.telebot.BotConnector;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.json.simple.parser.ParseException;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -36,7 +37,7 @@ public class TagJob extends QuartzJobBean {
         try {
             sendTag(userId, tagId);
         } catch (IOException | ParseException e) {
-             log.error(e.getMessage() + " " + e.getStackTrace().toString());
+             log.error(e.getMessage() + " " + ExceptionUtils.getStackTrace(e));
         }
 
     }
