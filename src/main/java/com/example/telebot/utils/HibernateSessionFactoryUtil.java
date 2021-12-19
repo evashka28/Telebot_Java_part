@@ -6,11 +6,13 @@ import com.example.telebot.Project;
 import com.example.telebot.Tag;
 import com.example.telebot.User;
 import com.example.telebot.Task;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 import com.example.telebot.quartz_try.payload.TagRequest;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+@Slf4j
 public class HibernateSessionFactoryUtil {
     private static SessionFactory sessionFactory;
 
@@ -30,7 +32,7 @@ public class HibernateSessionFactoryUtil {
                 sessionFactory = configuration.buildSessionFactory(builder.build());
 
             } catch (Exception e) {
-                System.out.println("Исключение!" + e);
+                log.debug("Исключение! " + e);
             }
         }
         return sessionFactory;

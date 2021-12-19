@@ -3,6 +3,7 @@ package com.example.telebot.services;
 import com.example.telebot.Tag;
 import com.example.telebot.dao.TagRequestDAO;
 import com.example.telebot.quartz_try.TagJob;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 @Service
+@Slf4j
 public class TagRequestServiceImpl implements TagRequestService {
     private final TagRequestDAO tagRequestDAO;
 
@@ -84,7 +86,7 @@ public class TagRequestServiceImpl implements TagRequestService {
         String cronstr = "0 " + time.getMinute() + " " + time.getHour() + " ? * ";
         String days = tagRequest.getDaysOfWeek();
         String cronDay = cronstr + days;
-        System.out.println(cronDay);
+        log.info(cronDay);
         JobDetail jobDetail = buildJobDetail(tagRequest, tagId, userId);
         Trigger trigger = buildTrigger(jobDetail, cronDay, zone);
         scheduler.scheduleJob(jobDetail, trigger);

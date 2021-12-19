@@ -1,5 +1,6 @@
 package com.example.telebot;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -12,6 +13,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 @Component
+@Slf4j
 public class BotConnector {
     public String sendTask(Task task, Long userId) throws IOException {
         URL url = new URL("http://localhost:8080/task");
@@ -22,7 +24,6 @@ public class BotConnector {
         connection.setDoOutput(true);
 
         String jsonOutput = task.toString();
-        System.out.printf(jsonOutput);
 
         try (OutputStream os = connection.getOutputStream()) {
             byte[] input = jsonOutput.getBytes(StandardCharsets.UTF_8);
@@ -38,7 +39,7 @@ public class BotConnector {
         }
         in.close();
 
-        System.out.println(response);
+        log.info(String.valueOf(response));
 
         return response.toString();
     }

@@ -2,6 +2,7 @@ package com.example.telebot.services;
 
 import com.example.telebot.TodoistConnector;
 import com.example.telebot.User;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
+@Slf4j
 public class SyncServiceImpl implements SyncService {
     private final UserService userService;
 
@@ -82,7 +84,7 @@ public class SyncServiceImpl implements SyncService {
                                 && (Long) taskObject.get("checked") == 1)) {
                     if (taskTodoistIds.contains(todoistId)) {
                         //delete task
-                        System.out.println("syncDelete");
+                        log.info("syncDelete");
 
                         taskService.deleteTaskFromBD(taskService.getByTodoistId(todoistId, userId).getId());
                     }
@@ -93,7 +95,7 @@ public class SyncServiceImpl implements SyncService {
                 if (!taskTodoistIds.contains(todoistId) && taskObject.containsKey("project_id")) {
                     Long projectTodoistId = (Long) taskObject.get("project_id");
                     if (projectTodoistIds.contains(projectTodoistId)) {
-                        System.out.println("syncAdd");
+                        log.info("syncAdd");
                         taskService.addTaskToDB(taskObject, projectService.getByTodoistId(projectTodoistId, userId));
                     }
                 }

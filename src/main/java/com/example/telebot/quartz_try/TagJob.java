@@ -4,6 +4,7 @@ import com.example.telebot.BotConnector;
 import com.example.telebot.Task;
 import com.example.telebot.services.TaskService;
 import com.example.telebot.BotConnector;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -14,6 +15,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import javax.persistence.NoResultException;
 import java.io.IOException;
 
+@Slf4j
 public class TagJob extends QuartzJobBean {
 
     private final TaskService taskService;
@@ -33,12 +35,8 @@ public class TagJob extends QuartzJobBean {
         long tagId = jobDataMap.getLong("tagId");
         try {
             sendTag(userId, tagId);
-        } catch (IOException e) {
-            // e.printStackTrace();
-        } catch (ParseException e) {
-            //e.printStackTrace();
-        } catch (NoResultException e) {
-            //e.printStackTrace();
+        } catch (IOException | ParseException e) {
+             log.error(e.getMessage() + " " + e.getStackTrace().toString());
         }
 
     }
@@ -47,7 +45,5 @@ public class TagJob extends QuartzJobBean {
         // TaskService taskService = new TaskService();
         Task outputTask = taskService.getByTag(UserId, TagId);
         botConnector.sendTask(outputTask, UserId);
-        //System.out.printf("wow %d",i);
-
     }
 }
