@@ -15,7 +15,7 @@ public class ProjectController {
     private final ProjectService service;
 
     @Autowired
-    public ProjectController(ProjectService service){
+    public ProjectController(ProjectService service) {
         this.service = service;
     }
 
@@ -45,8 +45,9 @@ public class ProjectController {
     public Project selectProject(@PathVariable long id, @RequestHeader long userId) throws IOException, ParseException {
         return service.select(id, userId);
     }
+
     @DeleteMapping(value = "project/selected/{id}")
-    public void deselectProject(@PathVariable long id){
+    public void deselectProject(@PathVariable long id) {
         service.deselect(id);
     }
 }

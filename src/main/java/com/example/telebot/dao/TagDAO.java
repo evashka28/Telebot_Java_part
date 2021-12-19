@@ -14,10 +14,12 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public class TagDAO extends AbstractDAO<Tag>{
-    public TagDAO() { setClazz(Tag.class); }
+public class TagDAO extends AbstractDAO<Tag> {
+    public TagDAO() {
+        setClazz(Tag.class);
+    }
 
-    public Tag get(long userId, long id){
+    public Tag get(long userId, long id) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
         Query query = session.createQuery("select tg from User u " +
@@ -30,13 +32,13 @@ public class TagDAO extends AbstractDAO<Tag>{
         List<Tag> output = (List<Tag>) query.getResultList();
 
 
-        if(output.size() == 0)
+        if (output.size() == 0)
             return null;
         session.close();
         return output.get(0);
     }
 
-    public List<Tag> getAllByUserId(long userId){
+    public List<Tag> getAllByUserId(long userId) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Query query = session.createQuery("select u.tags from User u where u.id = :userIdParam");
         query.setParameter("userIdParam", userId);
@@ -46,7 +48,7 @@ public class TagDAO extends AbstractDAO<Tag>{
         return output;
     }
 
-    public List<Tag> getMultipleById(List<Long> ids){
+    public List<Tag> getMultipleById(List<Long> ids) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Query query = session.createQuery("from Tag where id in :idsParam");
         query.setParameter("idsParam", ids);

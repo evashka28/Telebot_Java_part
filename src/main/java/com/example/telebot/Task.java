@@ -1,4 +1,5 @@
 package com.example.telebot;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table (name = "tasks")
+@Table(name = "tasks")
 public class Task implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,16 +46,17 @@ public class Task implements Serializable {
     @JsonIgnore
     private Set<Tag> tags;
 
-    public Task(long id, String description, String content, boolean favourite){
+    public Task(long id, String description, String content, boolean favourite) {
         this.id = id;
         this.description = description;
         this.content = content;
         this.favourite = favourite;
     }
 
-    public Task(){}
+    public Task() {
+    }
 
-    public long getId(){
+    public long getId() {
         return id;
     }
 
@@ -62,15 +64,17 @@ public class Task implements Serializable {
         return todoistId;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return description;
     }
 
-    public String getContent(){
+    public String getContent() {
         return content;
     }
 
-    public boolean getFavourite() { return favourite; }
+    public boolean getFavourite() {
+        return favourite;
+    }
 
     public Timestamp getCreationDatetime() {
         return creationDatetime;
@@ -121,19 +125,17 @@ public class Task implements Serializable {
     }
 
     public void addTag(Tag tag) {
-        if(tags == null)
+        if (tags == null)
             tags = new HashSet<Tag>();
         tags.add(tag);
     }
 
     public void removeTag(Tag tag) {
-        if(tags.contains(tag))
-            tags.remove(tag);
+        tags.remove(tag);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("{\"id\":%d, \"todoistId\":%d, \"description\":\"%s\", \"content\":\"%s\", \"favourite\":%s}",
                 id, todoistId, description, content, favourite);
     }

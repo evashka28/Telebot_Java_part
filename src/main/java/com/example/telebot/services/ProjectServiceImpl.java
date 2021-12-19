@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class ProjectServiceImpl implements ProjectService{
+public class ProjectServiceImpl implements ProjectService {
 
     private final TodoistConnector connector;
 
@@ -76,7 +76,7 @@ public class ProjectServiceImpl implements ProjectService{
     public List<Project> allSelected(long userId) throws IOException, ParseException {
         syncService.sync(userId);
         List<Project> output = projectDAO.getAllByUserId(userId);
-        output = mergeProjects(output,userId);
+        output = mergeProjects(output, userId);
         return output;
     }
 
@@ -94,7 +94,7 @@ public class ProjectServiceImpl implements ProjectService{
 
     //удаляет проект и все задачи из БД
     @Override
-    public void deselect(long projectId){
+    public void deselect(long projectId) {
         Project project = projectDAO.findById(projectId);
         projectDAO.delete(project);
     }
@@ -109,7 +109,7 @@ public class ProjectServiceImpl implements ProjectService{
     //Возвращает проект из БД с добавлением информации из todoist
     public Project mergeProject(Project project, long userId) throws IOException, ParseException {
         Project compareProject = get(project.getTodoistId(), userId);
-        if(compareProject == null)
+        if (compareProject == null)
             return null;
         project.setName(compareProject.getName());
         return project;
@@ -117,10 +117,10 @@ public class ProjectServiceImpl implements ProjectService{
 
     public List<Project> mergeProjects(List<Project> projects, long userId) throws IOException, ParseException {
         Iterator<Project> i = projects.iterator();
-        while(i.hasNext()) {
+        while (i.hasNext()) {
             Project project = i.next();
             project = mergeProject(project, userId);
-            if(project == null)
+            if (project == null)
                 i.remove();
         }
         return projects;
@@ -137,7 +137,7 @@ public class ProjectServiceImpl implements ProjectService{
     public Project getUserFavouriteProject(long userId) throws IOException, ParseException {
         syncService.sync(userId);
         Project output = projectDAO.getProjectByUserId(userId, true);
-        if(output == null) {
+        if (output == null) {
             output = projectDAO.getProjectByUserId(userId, false);
         }
         return output;

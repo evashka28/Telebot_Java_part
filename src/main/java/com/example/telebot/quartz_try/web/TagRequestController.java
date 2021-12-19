@@ -40,7 +40,7 @@ public class TagRequestController {
     }
 
     @PostMapping("/schedule/tag")
-    public TagRequest scheduleTag(@Valid @RequestBody TagRequest tagRequest,  @RequestHeader long tagId, @RequestHeader long userId) throws SchedulerException {
+    public TagRequest scheduleTag(@Valid @RequestBody TagRequest tagRequest, @RequestHeader long tagId, @RequestHeader long userId) throws SchedulerException {
         return tagRequestService.scheduleTag(tagRequest, tagId, userId);
     }
 

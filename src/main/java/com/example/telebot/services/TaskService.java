@@ -35,7 +35,6 @@ public interface TaskService {
 
     void addTasksToDB(String input, Project project) throws ParseException;
 
-
     void addTaskToDB(JSONObject input, Project project);
 
     void deleteTaskFromBD(long id);

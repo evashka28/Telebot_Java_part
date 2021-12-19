@@ -5,8 +5,8 @@ import com.example.telebot.User;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserDAO extends AbstractDAO<User>{
-    public UserDAO(){
+public class UserDAO extends AbstractDAO<User> {
+    public UserDAO() {
         setClazz(User.class);
     }
 }

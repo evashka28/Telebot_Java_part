@@ -36,7 +36,8 @@ public class TagRequest implements Serializable {
     private LocalTime dateTime;
 
 
-    public TagRequest() {}
+    public TagRequest() {
+    }
 
     public String getId() {
         return id;

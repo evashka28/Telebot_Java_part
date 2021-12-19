@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 @Service
-public class TagRequestServiceImpl implements TagRequestService{
+public class TagRequestServiceImpl implements TagRequestService {
     private final TagRequestDAO tagRequestDAO;
 
     private final TagService tagService;
@@ -22,7 +22,6 @@ public class TagRequestServiceImpl implements TagRequestService{
     private final Scheduler scheduler;
 
     private final UserService userService;
-
 
 
     @Autowired
@@ -56,7 +55,7 @@ public class TagRequestServiceImpl implements TagRequestService{
 
     @Override
     public TagRequest update(TagRequest tagRequest, long tagId, long userId) {
-        tagRequest.setTag(tagService.get(userId,tagId));
+        tagRequest.setTag(tagService.get(userId, tagId));
         return tagRequestDAO.update(tagRequest);
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 public class TagController {
-    private  final TagService tagService;
+    private final TagService tagService;
 
     @Autowired
     public TagController(TagService tagService) {
@@ -17,17 +17,17 @@ public class TagController {
     }
 
     @GetMapping(value = "/tags", produces = "application/json")
-    List<Tag> all(@RequestHeader long userId){
+    List<Tag> all(@RequestHeader long userId) {
         return tagService.all(userId);
     }
 
     @GetMapping(value = "/tag/{id}", produces = "application/json")
-    Tag get(@PathVariable long id, @RequestHeader long userId){
+    Tag get(@PathVariable long id, @RequestHeader long userId) {
         return tagService.get(id, userId);
     }
 
     @PostMapping(value = "/tag", produces = "application/json", consumes = "application/json")
-    Tag create(@RequestBody Tag newTag, @RequestHeader long userId){
+    Tag create(@RequestBody Tag newTag, @RequestHeader long userId) {
         return tagService.create(newTag, userId);
     }
 

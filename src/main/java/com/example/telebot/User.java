@@ -1,4 +1,5 @@
 package com.example.telebot;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import java.util.Set;
 
 
 @Entity
-@Table (name = "users")
+@Table(name = "users")
 public class User implements Serializable {
     @Id
     private long id;
@@ -38,25 +39,33 @@ public class User implements Serializable {
     private Set<Tag> tags;
 
 
-    public User(long id, String name, String token, String zone){
+    public User(long id, String name, String token, String zone) {
         this.id = id;
         this.token = token;
         this.name = name;
         this.syncToken = "*";
-        this.zone=zone;
+        this.zone = zone;
     }
 
     public User() {
         this.syncToken = "*";
     }
 
-    public long getId() { return id; }
+    public long getId() {
+        return id;
+    }
 
-    public String getToken() {return token;}
+    public String getToken() {
+        return token;
+    }
 
-    public String getZone() {return zone;}
+    public String getZone() {
+        return zone;
+    }
 
-    public String getName(){ return name; }
+    public String getName() {
+        return name;
+    }
 
     public String getSyncToken() {
         return syncToken;
@@ -83,8 +92,8 @@ public class User implements Serializable {
     }
 
     @Override
-    public String toString(){
-        return "User{" + "id='" + this.id + "', name='" + this.name + "', projectId='"  +
+    public String toString() {
+        return "User{" + "id='" + this.id + "', name='" + this.name + "', projectId='" +
                 "', token='" + this.token + "'}";
     }
 

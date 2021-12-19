@@ -27,22 +27,23 @@ public class TagJob extends QuartzJobBean {
 
 
     @Override
-    protected void executeInternal(JobExecutionContext jobExecutionContext){
+    protected void executeInternal(JobExecutionContext jobExecutionContext) {
         JobDataMap jobDataMap = jobExecutionContext.getMergedJobDataMap();
         long userId = jobDataMap.getLong("userId");
         long tagId = jobDataMap.getLong("tagId");
         try {
             sendTag(userId, tagId);
         } catch (IOException e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         } catch (ParseException e) {
             //e.printStackTrace();
-        }catch (NoResultException e) {
+        } catch (NoResultException e) {
             //e.printStackTrace();
         }
 
     }
-    private void sendTag( long UserId, long TagId) throws IOException, ParseException, NoResultException {
+
+    private void sendTag(long UserId, long TagId) throws IOException, ParseException, NoResultException {
         // TaskService taskService = new TaskService();
         Task outputTask = taskService.getByTag(UserId, TagId);
         botConnector.sendTask(outputTask, UserId);

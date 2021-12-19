@@ -30,7 +30,8 @@ public class Project implements Serializable {
     @OneToMany(mappedBy = "project", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Task> tasks;
 
-    public Project(){}
+    public Project() {
+    }
 
     public Project(long id, long todoistId, boolean favourite) {
         this.id = id;

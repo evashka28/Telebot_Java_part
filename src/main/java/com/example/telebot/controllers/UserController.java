@@ -14,7 +14,7 @@ public class UserController {
     private final UserService service;
 
     @Autowired
-    public UserController(UserService service){
+    public UserController(UserService service) {
         this.service = service;
     }
 
@@ -24,22 +24,22 @@ public class UserController {
     }
 
     @GetMapping(value = "/user/{id}")
-    public User getUser(@PathVariable long id){
+    public User getUser(@PathVariable long id) {
         return service.getUser(id);
     }
 
     @PutMapping(value = "/user/{id}", consumes = "application/json", produces = "application/json")
-    public User updateUser(@RequestBody User updatedUser, @PathVariable long id){
+    public User updateUser(@RequestBody User updatedUser, @PathVariable long id) {
         return service.update(updatedUser, id);
     }
 
     @PutMapping(value = "/user/{id}/timezone", consumes = "application/json", produces = "application/json")
-    public User updateTimezone(@RequestBody String timezone, @PathVariable long id){
+    public User updateTimezone(@RequestBody String timezone, @PathVariable long id) {
         return service.updateTimezone(id, timezone);
     }
 
     @DeleteMapping(value = "/user/{id}")
-    public void deleteUser(@PathVariable long id){
+    public void deleteUser(@PathVariable long id) {
         service.deleteUser(id);
     }
 }

@@ -9,10 +9,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 @Component
-public class BotConnector
-{
+public class BotConnector {
     public String sendTask(Task task, Long userId) throws IOException {
         URL url = new URL("http://localhost:8080/task");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -24,8 +24,8 @@ public class BotConnector
         String jsonOutput = task.toString();
         System.out.printf(jsonOutput);
 
-        try(OutputStream os = connection.getOutputStream()) {
-            byte[] input = jsonOutput.getBytes("utf-8");
+        try (OutputStream os = connection.getOutputStream()) {
+            byte[] input = jsonOutput.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
 

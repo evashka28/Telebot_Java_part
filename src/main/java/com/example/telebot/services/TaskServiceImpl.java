@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
     private final SyncService syncService;
 
     @Autowired
-    public TaskServiceImpl(TodoistConnector connector, @Lazy UserService userService, @Lazy ProjectService projectService, @Lazy TagService tagService, TaskDAO taskDAO, @Lazy SyncService syncService){
+    public TaskServiceImpl(TodoistConnector connector, @Lazy UserService userService, @Lazy ProjectService projectService, @Lazy TagService tagService, TaskDAO taskDAO, @Lazy SyncService syncService) {
         this.connector = connector;
         this.userService = userService;
         this.projectService = projectService;
@@ -48,7 +48,7 @@ public class TaskServiceImpl implements TaskService {
         String tempId = UUID.randomUUID().toString();
 
         Project project = (task.getFavourite() ? projectService.getUserFavouriteProject(userId) : projectService.getUserProject(userId));
-        String response =  connector.createTask(userService.getToken(userId), task.getContent(), task.getDescription(), project.getTodoistId(), tempId);
+        String response = connector.createTask(userService.getToken(userId), task.getContent(), task.getDescription(), project.getTodoistId(), tempId);
         Pair<Long, String> idAndSyncToken = Converter.parseProjectOrTaskCreation(response, tempId);
         task.setProject(project);
         task.setTodoistId(idAndSyncToken.getLeft());
@@ -133,7 +133,7 @@ public class TaskServiceImpl implements TaskService {
         syncService.sync(userId);
         task.setTags(Set.copyOf(tagService.getMultipleByIds(tagIds)));
         taskDAO.update(task);
-        connector.updateTask(userService.getToken(userId),  task.getContent(), task.getDescription(), task.getTodoistId());
+        connector.updateTask(userService.getToken(userId), task.getContent(), task.getDescription(), task.getTodoistId());
         return task;
     }
 
@@ -157,7 +157,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void addTasksToDB(String input, Project project) throws ParseException {
         List<Task> tasks = Converter.parseMultipleTasksJSON(input);
-        for(Task task: tasks){
+        for (Task task : tasks) {
             task.setProject(project);
             task.setCreationDatetime(Timestamp.from(Instant.now()));
             task.setLastAccessDatetime(Timestamp.from(Instant.now()));
@@ -183,7 +183,7 @@ public class TaskServiceImpl implements TaskService {
     //получение задачи из БД и добавление информации из todoist
     public Task mergeTask(Task task, long userId) throws IOException, ParseException {
         Task compareTask = taskFromTodoist(userId, task.getId());
-        if(compareTask == null)
+        if (compareTask == null)
             return null;
         task.setDescription(compareTask.getDescription());
         task.setContent(compareTask.getContent());
@@ -192,10 +192,10 @@ public class TaskServiceImpl implements TaskService {
 
     public List<Task> mergeTasks(List<Task> tasks, long userId) throws IOException, ParseException {
         Iterator<Task> i = tasks.iterator();
-        while(i.hasNext()) {
+        while (i.hasNext()) {
             Task task = i.next();
             task = mergeTask(task, userId);
-            if(task == null)
+            if (task == null)
                 i.remove();
         }
         return tasks;
@@ -214,12 +214,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public boolean addTagToTask(long userId, long id, long tagId){
+    public boolean addTagToTask(long userId, long id, long tagId) {
         Task task = taskDAO.get(userId, id);
         Tag tag = tagService.get(tagId, userId);
         if (task == null || tag == null)
             return false;
-        for(Tag currentTag :task.getTags()) {
+        for (Tag currentTag : task.getTags()) {
             if (currentTag.getId() == tagId)
                 return false;
         }

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-public class SyncServiceImpl implements SyncService{
+public class SyncServiceImpl implements SyncService {
     private final UserService userService;
 
     private final TaskService taskService;
@@ -37,18 +37,18 @@ public class SyncServiceImpl implements SyncService{
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject) parser.parse(syncInfo);
 
-        if(object.containsKey("projects")){
+        if (object.containsKey("projects")) {
             List<Long> projectTodoistIds = projectService.getAllTodoistIds(userId);
             syncProjects((JSONArray) object.get("projects"), projectTodoistIds, userId);
         }
 
-        if(object.containsKey("items")) {
+        if (object.containsKey("items")) {
             List<Long> projectTodoistIds = projectService.getAllTodoistIds(userId);
             List<Long> taskTodoistIds = taskService.getAllTodoistIds(userId);
             syncTasks((JSONArray) object.get("items"), taskTodoistIds, projectTodoistIds, userId);
         }
 
-        if(object.containsKey("sync_token")) {
+        if (object.containsKey("sync_token")) {
             syncToken = (String) object.get("sync_token");
             User user = userService.getUser(userId);
             user.setSyncToken(syncToken);
@@ -57,13 +57,13 @@ public class SyncServiceImpl implements SyncService{
     }
 
     private void syncProjects(JSONArray projectsSyncInfo, List<Long> projectTodoistIds, long userId) {
-        for(int i = 0; i < projectsSyncInfo.size(); i++) {
+        for (int i = 0; i < projectsSyncInfo.size(); i++) {
             JSONObject projectObject = (JSONObject) projectsSyncInfo.get(i);
             if (projectObject.containsKey("id")) {
                 Long todoistId = (Long) projectObject.get("id");
                 if (projectTodoistIds.contains(todoistId)
                         && projectObject.containsKey("is_deleted")
-                        && (Long)projectObject.get("is_deleted") == 1) {
+                        && (Long) projectObject.get("is_deleted") == 1) {
                     //delete project
                     projectService.deselect(projectService.getByTodoistId(todoistId, userId).getId());
                 }
@@ -72,7 +72,7 @@ public class SyncServiceImpl implements SyncService{
     }
 
     private void syncTasks(JSONArray tasksSyncInfo, List<Long> taskTodoistIds, List<Long> projectTodoistIds, long userId) {
-        for(int i = 0; i < tasksSyncInfo.size(); i++) {
+        for (int i = 0; i < tasksSyncInfo.size(); i++) {
             JSONObject taskObject = (JSONObject) tasksSyncInfo.get(i);
             if (taskObject.containsKey("id")) {
                 Long todoistId = (Long) taskObject.get("id");
@@ -80,7 +80,7 @@ public class SyncServiceImpl implements SyncService{
                         && (Long) taskObject.get("is_deleted") == 1) ||
                         (taskObject.containsKey("checked")
                                 && (Long) taskObject.get("checked") == 1)) {
-                    if(taskTodoistIds.contains(todoistId)) {
+                    if (taskTodoistIds.contains(todoistId)) {
                         //delete task
                         System.out.println("syncDelete");
 
@@ -101,9 +101,12 @@ public class SyncServiceImpl implements SyncService{
         }
     }
 
-    private void deleteProject() {}
+    private void deleteProject() {
+    }
 
-    private void deleteTask() {}
+    private void deleteTask() {
+    }
 
-    private void createTask() {}
+    private void createTask() {
+    }
 }

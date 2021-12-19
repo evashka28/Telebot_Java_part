@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public UserServiceImpl(TodoistConnector connector, UserDAO userDAO) {
         this.connector = connector;
-        this.userDAO = userDAO;
+        UserServiceImpl.userDAO = userDAO;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(long userId){
+    public void deleteUser(long userId) {
         User user = userDAO.findById(userId);
         userDAO.delete(user);
     }
@@ -46,8 +46,6 @@ public class UserServiceImpl implements UserService {
     public User getUser(long userId) {
         return userDAO.findById(userId);
     }
-
-
 
     @Override
     public String getToken(long id) {
@@ -75,6 +73,4 @@ public class UserServiceImpl implements UserService {
         user.setZone(timezone);
         return userDAO.update(user);
     }
-
-
 }

@@ -18,14 +18,12 @@ import java.util.List;
 import java.util.Queue;
 
 @Repository
-public class ProjectDAO extends AbstractDAO<Project>{
-    public ProjectDAO()
-    {
+public class ProjectDAO extends AbstractDAO<Project> {
+    public ProjectDAO() {
         setClazz(Project.class);
     }
 
-    public List<Project> getAllByUserId(long userId)
-    {
+    public List<Project> getAllByUserId(long userId) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Query query = session.createQuery("select u.projects from User u where u.id = :userIdParam");
         query.setParameter("userIdParam", userId);
@@ -34,7 +32,7 @@ public class ProjectDAO extends AbstractDAO<Project>{
         return output;
     }
 
-    public Project getProjectByUserId(long userId, boolean favourite){
+    public Project getProjectByUserId(long userId, boolean favourite) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Query query = session.createQuery("select u.projects from User u " +
                 "inner join u.projects p " +
@@ -46,12 +44,12 @@ public class ProjectDAO extends AbstractDAO<Project>{
 
         session.close();
 
-        if(output.size() == 0)
+        if (output.size() == 0)
             return null;
         return output.get(0);
     }
 
-    public List<Long> getAllTodoistIdsByUserId(long userId){
+    public List<Long> getAllTodoistIdsByUserId(long userId) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
         Query query = session.createQuery("select p.todoistId from User u " +

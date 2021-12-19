@@ -1,14 +1,14 @@
 package com.example.telebot.dao;
 
 
-import  com.example.telebot.utils.HibernateSessionFactoryUtil;
+import com.example.telebot.utils.HibernateSessionFactoryUtil;
 import com.google.common.base.Preconditions;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.io.Serializable;
 
-public abstract class AbstractDAO<T extends Serializable>{
+public abstract class AbstractDAO<T extends Serializable> {
     private Class<T> clazz;
 
     public final void setClazz(final Class<T> clazzToSet) {

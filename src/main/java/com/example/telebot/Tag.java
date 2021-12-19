@@ -3,7 +3,9 @@ package com.example.telebot;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+
 import com.example.telebot.quartz_try.payload.TagRequest;
+
 import java.io.Serializable;
 import java.util.Set;
 
@@ -68,7 +70,7 @@ public class Tag implements Serializable {
 
     @PreRemove
     private void removeTags() {
-        for(Task task: tasks) {
+        for (Task task : tasks) {
             task.removeTag(this);
         }
     }

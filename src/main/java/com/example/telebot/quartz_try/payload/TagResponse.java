@@ -12,15 +12,15 @@ public class TagResponse {
     private String jobId;
     private String jobGroup;
 
-    public TagResponse(boolean success){
-        this.success=success;
+    public TagResponse(boolean success) {
+        this.success = success;
 
     }
 
-    public TagResponse(boolean success, String jobId, String jobGroup){
-        this.success=success;
-        this.jobId=jobId;
-        this.jobGroup=jobGroup;
+    public TagResponse(boolean success, String jobId, String jobGroup) {
+        this.success = success;
+        this.jobId = jobId;
+        this.jobGroup = jobGroup;
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.telebot;
 
 //import org.json.simple.JSONOblect;
+
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Component;
 
@@ -65,23 +66,23 @@ public class TodoistConnector {
     }
 
     //post-запрос создаёт новый проект
-    public String createProject(String token, String projectName, String tempId) throws IOException    {
+    public String createProject(String token, String projectName, String tempId) throws IOException {
         HashMap<String, Object> params = new HashMap<String, Object>();
         //params.put("sync_token", "gC00ZIYB51_eCo1_mmhTT4x9RexLm5jQG2GamTqL5Au_tcVhD5C4af8B5Ikq63rC3vpZZoEFzkJ2VaxXdowwiL8BbhefU02ftQQ5dO_KzL2J1Q");
         params.put("commands", String.format("[{\"type\":\"project_add\",\"temp_id\":\"%s\"," +
-                "\"uuid\":\"%s\",\"args\":{\"name\":\"%s\"}}]", tempId,
-                UUID.randomUUID().toString(), projectName));
+                        "\"uuid\":\"%s\",\"args\":{\"name\":\"%s\"}}]", tempId,
+                UUID.randomUUID(), projectName));
         String response = POSTRequest("https://api.todoist.com/sync/v8/sync?", params, token);
         return response;
     }
 
     //post-запрос обновляет название проекта
-    public String updateProject(String token, String projectName) throws IOException    {
+    public String updateProject(String token, String projectName) throws IOException {
         HashMap<String, Object> params = new HashMap<String, Object>();
         //params.put("sync_token", "gC00ZIYB51_eCo1_mmhTT4x9RexLm5jQG2GamTqL5Au_tcVhD5C4af8B5Ikq63rC3vpZZoEFzkJ2VaxXdowwiL8BbhefU02ftQQ5dO_KzL2J1Q");
         params.put("commands", String.format("[{\"type\":\"project_update\",\"temp_id\":\"%s\"," +
-                        "\"uuid\":\"%s\",\"args\":{\"name\":\"%s\"}}]", UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(), projectName));
+                        "\"uuid\":\"%s\",\"args\":{\"name\":\"%s\"}}]", UUID.randomUUID(),
+                UUID.randomUUID(), projectName));
         String response = POSTRequest("https://api.todoist.com/sync/v8/sync?", params, token);
         return response;
     }
@@ -101,21 +102,21 @@ public class TodoistConnector {
     }
 
     //post-запрос создаёт новое задание в проекте
-    public String createTask(String token, String taskName, String description , long projectId, String tempId) throws IOException {
+    public String createTask(String token, String taskName, String description, long projectId, String tempId) throws IOException {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("commands", String.format("[{\"type\":\"item_add\",\"temp_id\":\"%s\"," +
                         "\"uuid\":\"%s\",\"args\":{\"project_id\":\"%d\",\"content\":\"%s\",\"description\":\"%s\"}}]",
-                tempId, UUID.randomUUID().toString(), projectId, taskName, description));
+                tempId, UUID.randomUUID(), projectId, taskName, description));
         String response = POSTRequest("https://api.todoist.com/sync/v8/sync?", params, token);
         return response;
     }
 
     //post-запрос обновляет информацию о задаче по id
-    public String updateTask(String token, String taskName, String description , long taskId) throws IOException {
+    public String updateTask(String token, String taskName, String description, long taskId) throws IOException {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("commands", String.format("[{\"type\":\"item_update\",\"temp_id\":\"%s\"," +
                         "\"uuid\":\"%s\",\"args\":{\"id\":\"%d\",\"content\":\"%s\",\"description\":\"%s\"}}]",
-                UUID.randomUUID().toString(), UUID.randomUUID().toString(), taskId, taskName, description));
+                UUID.randomUUID(), UUID.randomUUID(), taskId, taskName, description));
         String response = POSTRequest("https://api.todoist.com/sync/v8/sync?", params, token);
         return response;
     }
@@ -125,7 +126,7 @@ public class TodoistConnector {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("commands", String.format("[{\"type\":\"item_complete\",\"temp_id\":\"%s\"," +
                         "\"uuid\":\"%s\",\"args\":{\"id\":\"%d\"}}]",
-                UUID.randomUUID().toString(), UUID.randomUUID().toString(), taskId));
+                UUID.randomUUID(), UUID.randomUUID(), taskId));
         String response = POSTRequest("https://api.todoist.com/sync/v8/sync?", params, token);
     }
 
@@ -134,7 +135,7 @@ public class TodoistConnector {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("commands", String.format("[{\"type\":\"item_delete\",\"temp_id\":\"%s\"," +
                         "\"uuid\":\"%s\",\"args\":{\"id\":\"%d\"}}]",
-                UUID.randomUUID().toString(), UUID.randomUUID().toString(), taskId));
+                UUID.randomUUID(), UUID.randomUUID(), taskId));
         String response = POSTRequest("https://api.todoist.com/sync/v8/sync?", params, token);
     }
 
@@ -142,7 +143,7 @@ public class TodoistConnector {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("commands", String.format("[{\"type\":\"project_delete\",\"temp_id\":\"%s\"," +
                         "\"uuid\":\"%s\",\"args\":{\"id\":\"%d\"}}]",
-                UUID.randomUUID().toString(), UUID.randomUUID().toString(), projectId));
+                UUID.randomUUID(), UUID.randomUUID(), projectId));
         String response = POSTRequest("https://api.todoist.com/sync/v8/sync?", params, token);
     }
 

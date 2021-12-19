@@ -9,12 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class TaskDAO extends AbstractDAO<Task>{
-    public TaskDAO(){
+public class TaskDAO extends AbstractDAO<Task> {
+    public TaskDAO() {
         setClazz(Task.class);
     }
 
-    public Task get(long userId, long id){
+    public Task get(long userId, long id) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
         Query query = session.createQuery("select t from User u " +
@@ -28,13 +28,13 @@ public class TaskDAO extends AbstractDAO<Task>{
         List<Task> output = (List<Task>) query.getResultList();
 
 
-        if(output.size() == 0)
+        if (output.size() == 0)
             return null;
         session.close();
         return output.get(0);
     }
 
-    public List<Task> getAll(long userId, boolean favourite){
+    public List<Task> getAll(long userId, boolean favourite) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Query query = session.createQuery("select t from User u " +
                 "inner join u.projects p " +
@@ -49,15 +49,15 @@ public class TaskDAO extends AbstractDAO<Task>{
         return output;
     }
 
-    public List<Task> getAll(long userId){
+    public List<Task> getAll(long userId) {
         return getAll(userId, false);
     }
 
-    public List<Task> getAllFavourites(long userId){
+    public List<Task> getAllFavourites(long userId) {
         return getAll(userId, true);
     }
 
-    public Task getWithOldestLastAccess(long userId){
+    public Task getWithOldestLastAccess(long userId) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
         Query query = session.createQuery("select t from User u " +
@@ -73,12 +73,12 @@ public class TaskDAO extends AbstractDAO<Task>{
 
         session.close();
 
-        if(output.size() == 0)
+        if (output.size() == 0)
             return null;
         return output.get(0);
     }
 
-    public List<Long> getAllTodoistIdsByUserId(long userId){
+    public List<Long> getAllTodoistIdsByUserId(long userId) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
         Query query = session.createQuery("select t.todoistId from User u " +
@@ -93,7 +93,7 @@ public class TaskDAO extends AbstractDAO<Task>{
         return output;
     }
 
-    public List<Task> getAllByTagId(long tagId, long userId, boolean favourite){
+    public List<Task> getAllByTagId(long tagId, long userId, boolean favourite) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
         Query query = session.createQuery("select t from User u " +
@@ -131,7 +131,7 @@ public class TaskDAO extends AbstractDAO<Task>{
         List<Task> output = (List<Task>) query.getResultList();
 
 
-        if(output.size() == 0)
+        if (output.size() == 0)
             return null;
         session.close();
         return output.get(0);
@@ -153,7 +153,7 @@ public class TaskDAO extends AbstractDAO<Task>{
 
         session.close();
 
-        if(output.size() == 0)
+        if (output.size() == 0)
             return null;
         return output.get(0);
     }

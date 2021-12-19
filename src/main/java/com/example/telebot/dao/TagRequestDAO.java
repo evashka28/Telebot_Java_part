@@ -10,10 +10,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class TagRequestDAO extends AbstractDAO<TagRequest>{
-    public TagRequestDAO() { setClazz(TagRequest.class); }
+public class TagRequestDAO extends AbstractDAO<TagRequest> {
+    public TagRequestDAO() {
+        setClazz(TagRequest.class);
+    }
 
-    public TagRequest get(long tagId, String id){
+    public TagRequest get(long tagId, String id) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
         Query query = session.createQuery("select sh from Tag tg " +
@@ -28,13 +30,13 @@ public class TagRequestDAO extends AbstractDAO<TagRequest>{
 
         session.close();
 
-        if(output.size() == 0)
+        if (output.size() == 0)
             return null;
 
         return output.get(0);
     }
 
-    public TagRequest get(String id){
+    public TagRequest get(String id) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
         Query query = session.createQuery("from TagRequest tr where " +
@@ -45,13 +47,13 @@ public class TagRequestDAO extends AbstractDAO<TagRequest>{
 
         session.close();
 
-        if(output.size() == 0)
+        if (output.size() == 0)
             return null;
 
         return output.get(0);
     }
 
-    public List<TagRequest> getAllByTagId(long tagId){
+    public List<TagRequest> getAllByTagId(long tagId) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Query query = session.createQuery("select tg.tagRequests from Tag tg where tg.id = :tagIdParam");
         query.setParameter("tagIdParam", tagId);
@@ -61,7 +63,7 @@ public class TagRequestDAO extends AbstractDAO<TagRequest>{
         return output;
     }
 
-    public List<TagRequest> getAllByUserId(long userId){
+    public List<TagRequest> getAllByUserId(long userId) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Query query = session.createQuery("select tr from User u " +
                 "inner join u.tags tg " +
