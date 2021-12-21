@@ -1,14 +1,17 @@
 package com.example.telebot.services;
 
 import com.example.telebot.*;
+import com.example.telebot.connectors.TodoistConnector;
 import com.example.telebot.dao.TaskDAO;
+import com.example.telebot.entities.Project;
+import com.example.telebot.entities.Tag;
+import com.example.telebot.entities.Task;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.sql.Timestamp;

@@ -1,7 +1,8 @@
-package com.example.telebot;
+package com.example.telebot.connectors;
 
 //import org.json.simple.JSONOblect;
 
+import com.example.telebot.Converter;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Component;

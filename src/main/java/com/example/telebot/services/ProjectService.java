@@ -1,6 +1,6 @@
 package com.example.telebot.services;
 
-import com.example.telebot.Project;
+import com.example.telebot.entities.Project;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;

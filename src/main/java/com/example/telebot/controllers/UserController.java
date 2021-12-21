@@ -1,13 +1,12 @@
 package com.example.telebot.controllers;
 
 
-import com.example.telebot.User;
+import com.example.telebot.entities.User;
 import com.example.telebot.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.time.LocalTime;
 
 @RestController
 public class UserController {

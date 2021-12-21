@@ -1,6 +1,6 @@
 package com.example.telebot.services;
 
-import com.example.telebot.Tag;
+import com.example.telebot.entities.Tag;
 import com.example.telebot.dao.TagDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

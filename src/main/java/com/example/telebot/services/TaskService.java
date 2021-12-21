@@ -1,11 +1,9 @@
 package com.example.telebot.services;
 
-import com.example.telebot.Project;
-import com.example.telebot.Tag;
-import com.example.telebot.Task;
+import com.example.telebot.entities.Project;
+import com.example.telebot.entities.Task;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
 import java.util.List;

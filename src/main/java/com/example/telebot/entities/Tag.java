@@ -1,10 +1,8 @@
-package com.example.telebot;
+package com.example.telebot.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-
-import com.example.telebot.quartz_try.payload.TagRequest;
 
 import java.io.Serializable;
 import java.util.Set;

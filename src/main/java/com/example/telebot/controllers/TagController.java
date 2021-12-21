@@ -1,6 +1,6 @@
 package com.example.telebot.controllers;
 
-import com.example.telebot.Tag;
+import com.example.telebot.entities.Tag;
 import com.example.telebot.services.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

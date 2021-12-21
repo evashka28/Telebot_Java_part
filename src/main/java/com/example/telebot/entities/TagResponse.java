@@ -1,4 +1,4 @@
-package com.example.telebot.quartz_try.payload;
+package com.example.telebot.entities;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;

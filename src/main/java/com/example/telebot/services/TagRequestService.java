@@ -1,7 +1,6 @@
 package com.example.telebot.services;
 
-import com.example.telebot.Tag;
-import com.example.telebot.quartz_try.payload.TagRequest;
+import com.example.telebot.entities.TagRequest;
 import org.quartz.JobDetail;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;

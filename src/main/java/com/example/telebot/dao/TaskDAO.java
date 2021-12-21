@@ -1,6 +1,6 @@
 package com.example.telebot.dao;
 
-import com.example.telebot.Task;
+import com.example.telebot.entities.Task;
 import com.example.telebot.utils.HibernateSessionFactoryUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;

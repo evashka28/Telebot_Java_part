@@ -1,31 +1,16 @@
-package com.example.telebot.quartz_try.web;
+package com.example.telebot.controllers;
 
-import com.example.telebot.Tag;
-import com.example.telebot.quartz_try.TagJob;
-import com.example.telebot.quartz_try.payload.TagRequest;
-import com.example.telebot.quartz_try.payload.TagResponse;
-import com.example.telebot.services.TagService;
+import com.example.telebot.entities.TagRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
-import org.quartz.CronScheduleBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.telebot.services.UserService;
 import com.example.telebot.services.TagRequestService;
-import com.example.telebot.services.TagService;
 
 import javax.validation.Valid;
 
-import java.nio.charset.StandardCharsets;
-import java.time.LocalTime;
-import java.time.*;
-import java.time.ZonedDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.UUID;
 
 @Slf4j
 @RestController

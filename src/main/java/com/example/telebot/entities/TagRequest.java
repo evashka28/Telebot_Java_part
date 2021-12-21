@@ -1,11 +1,7 @@
-package com.example.telebot.quartz_try.payload;
+package com.example.telebot.entities;
 
-import com.example.telebot.Tag;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
+import com.example.telebot.entities.Tag;
 import lombok.NonNull;
-import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 
@@ -28,7 +24,7 @@ public class TagRequest implements Serializable {
     private Tag tag;
 
 
-    @Column(name = "daysofweek")
+    @Column(name = "days_of_week")
     String daysOfWeek;
 
     @NonNull

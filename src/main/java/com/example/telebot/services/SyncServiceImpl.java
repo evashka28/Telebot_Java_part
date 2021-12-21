@@ -1,7 +1,7 @@
 package com.example.telebot.services;
 
-import com.example.telebot.TodoistConnector;
-import com.example.telebot.User;
+import com.example.telebot.connectors.TodoistConnector;
+import com.example.telebot.entities.User;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

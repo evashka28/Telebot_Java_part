@@ -1,7 +1,7 @@
 package com.example.telebot.controllers;
 
 
-import com.example.telebot.Project;
+import com.example.telebot.entities.Project;
 import com.example.telebot.services.ProjectService;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;

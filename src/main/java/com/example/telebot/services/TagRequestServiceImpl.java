@@ -1,14 +1,13 @@
 package com.example.telebot.services;
 
-import com.example.telebot.Tag;
+import com.example.telebot.entities.Tag;
 import com.example.telebot.dao.TagRequestDAO;
 import com.example.telebot.quartz_try.TagJob;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.telebot.quartz_try.payload.TagRequest;
-import org.springframework.web.bind.annotation.RequestHeader;
+import com.example.telebot.entities.TagRequest;
 
 import java.time.LocalTime;
 import java.util.List;

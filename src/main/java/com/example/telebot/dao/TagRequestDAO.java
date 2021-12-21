@@ -1,10 +1,9 @@
 package com.example.telebot.dao;
 
-import com.example.telebot.Tag;
 import com.example.telebot.utils.HibernateSessionFactoryUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import com.example.telebot.quartz_try.payload.TagRequest;
+import com.example.telebot.entities.TagRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

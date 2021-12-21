@@ -1,8 +1,8 @@
 package com.example.telebot.services;
 
 import com.example.telebot.Converter;
-import com.example.telebot.Project;
-import com.example.telebot.TodoistConnector;
+import com.example.telebot.entities.Project;
+import com.example.telebot.connectors.TodoistConnector;
 import com.example.telebot.dao.ProjectDAO;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.simple.parser.ParseException;

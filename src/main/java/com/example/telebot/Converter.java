@@ -1,6 +1,7 @@
 package com.example.telebot;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import com.example.telebot.entities.Project;
+import com.example.telebot.entities.Task;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

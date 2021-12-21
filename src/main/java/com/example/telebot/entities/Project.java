@@ -1,10 +1,9 @@
-package com.example.telebot;
+package com.example.telebot.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 @Entity

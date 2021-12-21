@@ -1,10 +1,8 @@
 package com.example.telebot.services;
 
-import com.example.telebot.User;
-import org.springframework.context.annotation.Bean;
+import com.example.telebot.entities.User;
 
 import java.io.IOException;
-import java.time.ZoneId;
 
 public interface UserService {
     User create(User user) throws IOException;

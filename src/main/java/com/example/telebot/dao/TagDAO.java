@@ -1,16 +1,11 @@
 package com.example.telebot.dao;
 
-import com.example.telebot.Project;
-import com.example.telebot.Tag;
-import com.example.telebot.Task;
+import com.example.telebot.entities.Tag;
 import com.example.telebot.utils.HibernateSessionFactoryUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository

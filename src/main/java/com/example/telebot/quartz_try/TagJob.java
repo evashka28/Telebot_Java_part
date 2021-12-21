@@ -1,9 +1,8 @@
 package com.example.telebot.quartz_try;
 
-import com.example.telebot.BotConnector;
-import com.example.telebot.Task;
+import com.example.telebot.connectors.BotConnector;
+import com.example.telebot.entities.Task;
 import com.example.telebot.services.TaskService;
-import com.example.telebot.BotConnector;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.json.simple.parser.ParseException;

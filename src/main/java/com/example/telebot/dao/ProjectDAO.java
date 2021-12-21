@@ -1,21 +1,12 @@
 package com.example.telebot.dao;
 
-import com.example.telebot.Project;
-import com.example.telebot.Task;
+import com.example.telebot.entities.Project;
 import com.example.telebot.utils.HibernateSessionFactoryUtil;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 @Repository
 public class ProjectDAO extends AbstractDAO<Project> {

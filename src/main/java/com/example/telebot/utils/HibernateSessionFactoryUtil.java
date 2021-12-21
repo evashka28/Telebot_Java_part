@@ -2,13 +2,13 @@ package com.example.telebot.utils;
 
 
 
-import com.example.telebot.Project;
-import com.example.telebot.Tag;
-import com.example.telebot.User;
-import com.example.telebot.Task;
+import com.example.telebot.entities.Project;
+import com.example.telebot.entities.Tag;
+import com.example.telebot.entities.User;
+import com.example.telebot.entities.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
-import com.example.telebot.quartz_try.payload.TagRequest;
+import com.example.telebot.entities.TagRequest;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
