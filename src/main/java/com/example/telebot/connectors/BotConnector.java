@@ -16,7 +16,9 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class BotConnector {
     public String sendTask(Task task, Long userId) throws IOException {
-        URL url = new URL("http://localhost:8080/task");
+        if (task == null)
+            return "";
+        URL url = new URL("http://localhost:8082/task");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json");
